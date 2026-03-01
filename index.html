@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>LifeSmart — Financial Education</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07070F;--card:#0F0F1C;--card-el:#161626;
+  --teal:#00D4AA;--teal-dim:rgba(0,212,170,0.12);--teal-glow:rgba(0,212,170,0.35);
+  --purple:#7C3AED;--amber:#F59E0B;--orange:#F97316;
+  --locked:#1A1A2E;--text:#FFFFFF;--text-2:#8892A4;--text-m:#3D4558;
+  --ok:#10B981;--bad:#EF4444;--font:'Inter',sans-serif;
+}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden}
+#app{max-width:430px;min-height:100vh;margin:0 auto;position:relative;overflow-x:hidden}
+@media(min-width:500px){
+  body{background:#03030A;display:flex;align-items:flex-start;justify-content:center;padding:24px 0 60px}
+  #app{border-radius:36px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,0.06),0 40px 80px rgba(0,0,0,.7);min-height:860px}
+}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(7,7,15,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.04);padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.wm{font-size:18px;font-weight:800;letter-spacing:-.4px}.wm .l{color:var(--teal)}.wm .s{color:#fff}
+/* video placeholder */
+.vph{background:#0D0D20;border-radius:14px;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;border:1px solid rgba(255,255,255,.06);margin-bottom:16px;transition:background .2s}
+.vph:hover{background:#131330}.vph-play{width:52px;height:52px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 20px var(--teal-glow)}
+.vph-name{font-size:13px;font-weight:700;color:var(--text)}.vph-hint{font-size:11px;font-weight:500;color:var(--text-2)}
+/* purple theme for level 2 */
+.sv.purple{background:linear-gradient(135deg,#130820,#1C0F35)}
+.callout-purple{border-left-color:var(--purple);background:rgba(124,58,237,.1);color:#A78BFA}
+.sco.purple{border-left-color:var(--purple);background:rgba(124,58,237,.1);color:#A78BFA}
+/* amber theme for level 3 */
+.sv.amber{background:linear-gradient(135deg,#1A1005,#251808)}
+.callout-amber{border-left-color:var(--amber);background:rgba(245,158,11,.1);color:var(--amber)}
+/* debt simulator */
+.sim-scenario{background:var(--card-el);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.sim-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}.sim-row:last-child{border:none}
+.sim-lbl{font-size:13px;font-weight:500;color:var(--text-2)}.sim-val{font-size:14px;font-weight:800}
+.sim-slider-wrap{background:var(--card-el);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.sim-slider-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sim-slider-label{font-size:13px;font-weight:600;color:var(--text-2)}.sim-slider-val{font-size:22px;font-weight:800;color:#A78BFA}
+input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:3px;background:rgba(124,58,237,.25);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--purple);cursor:pointer;box-shadow:0 0 10px rgba(124,58,237,.5)}
+.sim-range-hint{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--text-m);margin-top:4px}
+.sim-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.sim-stat{background:var(--card);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:10px 8px;text-align:center}
+.sim-stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-m);margin-bottom:4px}
+.sim-stat-val{font-size:15px;font-weight:800}
+.sim-graph{background:var(--card-el);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px;margin-bottom:12px}
+.sim-graph-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-m);margin-bottom:8px;text-align:center}
+.sim-legend{display:flex;justify-content:center;gap:14px;margin-top:8px}
+.sim-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--text-2)}
+.sim-leg-dot{width:8px;height:8px;border-radius:50%}
+.sim-insight{font-size:13px;font-weight:500;color:var(--text-2);line-height:1.6;font-style:italic;text-align:center;margin-bottom:18px}
+/* myth vs fact */
+.mvf-card{background:var(--card-el);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:20px;margin-bottom:14px}
+.mvf-stmt{font-size:17px;font-weight:700;line-height:1.4;margin-bottom:18px}
+.mvf-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mvf-btn{padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:800;font-family:var(--font);cursor:pointer;transition:all .15s}
+.mvf-myth{background:rgba(239,68,68,.15);color:#F87171;border:1.5px solid rgba(239,68,68,.3)}
+.mvf-fact{background:rgba(16,185,129,.15);color:#34D399;border:1.5px solid rgba(16,185,129,.3)}
+.mvf-fb{border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;font-weight:500;line-height:1.55;display:none}
+.mvf-fb.show{display:block}.mvf-fb.ok{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:#34D399}
+.mvf-fb.bad{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#F87171}
+.mvf-score-wrap{text-align:center;padding:20px 0}
+/* cost of waiting sliders */
+input[type=range].amber{background:rgba(245,158,11,.25)}
+input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow:0 0 10px rgba(245,158,11,.4)}
+.cow-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.cow-card{background:var(--card);border:1px solid rgba(255,255,255,.05);border-radius:12px;padding:12px}
+.cow-card-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-m);margin-bottom:4px}
+.cow-card-age{font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:2px}
+.cow-card-inv{font-size:11px;font-weight:500;color:var(--text-m);margin-bottom:6px}
+.cow-card-num{font-size:22px;font-weight:800}
+.cow-diff{border-radius:12px;padding:14px;text-align:center;margin-bottom:14px}
+.cow-diff.loss{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15)}
+.cow-diff.win{background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.15)}
+.cow-diff-lbl{font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:4px}
+.cow-diff-num{font-size:28px;font-weight:800}
+.cow-diff-sub{font-size:11px;font-weight:500;color:var(--text-m);margin-top:2px}
+/* nws sorter */
+.nws-item{background:var(--card-el);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:24px 16px;text-align:center;margin-bottom:16px}
+.nws-emoji{font-size:40px;margin-bottom:8px}.nws-name{font-size:18px;font-weight:800;margin-bottom:4px}
+.nws-desc{font-size:13px;font-weight:500;color:var(--text-2)}
+.nws-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.nws-btn{padding:13px 4px;border-radius:12px;border:none;font-size:13px;font-weight:800;font-family:var(--font);cursor:pointer;transition:all .15s}
+.nws-need{background:var(--teal-dim);color:var(--teal);border:1.5px solid rgba(0,212,170,.3)}
+.nws-want{background:rgba(124,58,237,.15);color:#A78BFA;border:1.5px solid rgba(124,58,237,.3)}
+.nws-save{background:rgba(245,158,11,.15);color:var(--amber);border:1.5px solid rgba(245,158,11,.3)}
+.nws-fb{border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:13px;font-weight:500;line-height:1.55;display:none}
+.nws-fb.show{display:block}.nws-fb.ok{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2)}
+.nws-fb.hmm{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2)}
+/* lc purple/amber */
+.lc-cat.purple{background:rgba(124,58,237,.2);color:#A78BFA}
+.lc-cat.amber{background:rgba(245,158,11,.2);color:var(--amber)}
+.lc-xp.purple .lc-xn{color:#A78BFA}
+.lc-xp.amber .lc-xn{color:var(--amber)}
+/* demo complete */
+.dc-wrap{text-align:center;padding:16px 0}
+.dc-logo{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:8px}
+.dc-logo .l{color:var(--teal)}.dc-logo .s{color:#fff}
+.dc-title{font-size:22px;font-weight:800;letter-spacing:-.4px;line-height:1.3;margin-bottom:20px}
+.dc-stat-card{background:var(--card);border:1px solid rgba(0,212,170,.15);border-radius:14px;padding:20px;margin-bottom:16px}
+.dc-xp{font-size:38px;font-weight:800;color:var(--teal);margin-bottom:4px}
+.dc-ch{font-size:14px;font-weight:600;color:var(--text-2);margin-bottom:12px}
+.dc-badges{font-size:24px;letter-spacing:4px}
+.dc-map-strip{display:flex;justify-content:center;align-items:center;gap:5px;margin-bottom:6px;flex-wrap:wrap}
+.dc-node{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+.dc-node.t{background:var(--teal);color:#07070F}.dc-node.p{background:var(--purple);color:#fff}
+.dc-node.a{background:var(--amber);color:#07070F}.dc-node.lk{background:var(--locked);color:var(--text-m)}
+/* News floating button */
+.news-fab{position:fixed;bottom:28px;right:calc(50% - 215px + 16px);z-index:150;background:linear-gradient(135deg,#EF4444,#B91C1C);border:none;border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(239,68,68,.45);animation:newsPulse 2.5s ease-in-out infinite;transition:transform .15s}
+.news-fab:active{transform:scale(.93)}
+@keyframes newsPulse{0%,100%{box-shadow:0 4px 20px rgba(239,68,68,.45)}50%{box-shadow:0 4px 32px rgba(239,68,68,.75),0 0 0 8px rgba(239,68,68,.12)}}
+.news-fab-lbl{position:fixed;bottom:88px;right:calc(50% - 215px + 4px);z-index:150;background:#EF4444;color:#fff;font-size:10px;font-weight:800;letter-spacing:.05em;border-radius:8px;padding:3px 8px;pointer-events:none;white-space:nowrap}
+@media(max-width:499px){.news-fab{right:16px}.news-fab-lbl{right:4px}}
+/* XP bar */
+.xp-bar-wrap{padding:0 20px;margin-bottom:16px}
+.xp-bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;font-size:12px;font-weight:700}
+.xp-bar-lbl{color:var(--text-m)}.xp-bar-val{color:var(--teal)}
+.xp-bar-track{background:var(--card-el);border-radius:4px;height:6px;overflow:hidden}
+.xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),#00F5C4);border-radius:4px;transition:width .6s ease;min-width:2px}
+/* level badge */
+.lv-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(124,58,237,.18);border:1px solid rgba(124,58,237,.3);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:800;color:#A78BFA;margin-bottom:10px}
+/* news slide CSS */
+.news-banner{background:linear-gradient(135deg,#1A0505,#2D0808);border:1px solid rgba(239,68,68,.3);border-radius:14px;padding:16px;margin-bottom:14px}
+.news-tag{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#F87171;margin-bottom:6px}
+.news-hl{font-size:17px;font-weight:800;line-height:1.3;margin-bottom:8px;color:#fff}
+.news-src{font-size:11px;font-weight:600;color:rgba(248,113,113,.5)}
+.tariff-sort{background:var(--card-el);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:18px;margin-bottom:14px}
+.tariff-item{background:var(--card);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .15s;border:1.5px solid transparent}
+.tariff-item:hover{border-color:rgba(239,68,68,.3);background:#110505}
+.tariff-item.win{border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.06)}
+.tariff-item.lose{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.06)}
+.tariff-item.neutral{border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.05)}
+.tariff-item-name{font-size:15px;font-weight:700;margin-bottom:3px}
+.tariff-item-desc{font-size:12px;color:var(--text-2)}
+.tariff-fb{display:none;border-radius:8px;padding:10px 12px;margin-top:-4px;margin-bottom:10px;font-size:12px;font-weight:600;line-height:1.5}
+.tariff-fb.show{display:block}.tariff-fb.ok{background:rgba(16,185,129,.1);color:#34D399}
+.tariff-fb.bad{background:rgba(239,68,68,.08);color:#F87171}.tariff-fb.hmm{background:rgba(245,158,11,.08);color:var(--amber)}
+/* combo + streak fire */
+.combo-badge{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:500;background:var(--amber);color:#07070F;font-size:13px;font-weight:800;padding:6px 16px;border-radius:20px;opacity:0;pointer-events:none;transition:all .3s}
+.combo-badge.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+
+.dc-strip-lbl{font-size:11px;font-weight:600;color:var(--text-m);text-align:center;margin-bottom:16px}
+.dc-body{font-size:14px;font-weight:500;color:var(--text-2);line-height:1.65;margin-bottom:24px}
+/* security check NO expansion */
+.ck-expand{overflow:hidden;max-height:0;transition:max-height .3s ease;padding:0 0 0 0}
+.ck-expand.open{max-height:80px}
+.ck-expand-inner{padding:8px 0 4px;display:flex;align-items:flex-start;gap:6px}
+.ck-expand-txt{font-size:12px;font-weight:600;color:var(--amber);line-height:1.5}
+.tp{display:flex;align-items:center;gap:16px}
+.sp{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700}
+.sc{color:var(--amber)}.xc{color:var(--teal)}
+.home-scroll{padding:24px 0 60px;opacity:0;animation:fadeIn .4s ease 2.4s forwards}
+@keyframes fadeIn{to{opacity:1}}
+.greeting{padding:0 20px 20px}
+.gl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+.gt{font-size:26px;font-weight:800;line-height:1.15;letter-spacing:-.5px;margin-bottom:6px}
+.gs{font-size:13px;font-weight:500;color:var(--text-2)}
+.jl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);padding:0 20px;margin-bottom:20px}
+.map-c{position:relative;width:100%;padding:0 0 20px}
+.map-svg{position:absolute;top:0;left:0;width:100%;pointer-events:none;z-index:0}
+.map-n{position:relative;z-index:1}
+.nc{flex-shrink:0;width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;position:relative;cursor:pointer;transition:transform .15s}
+.nc:active{transform:scale(.91)}
+.nc.active{background:transparent;border:2.5px solid var(--teal);box-shadow:0 0 0 4px var(--teal-dim),0 0 20px var(--teal-glow)}
+.nc.active::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1.5px solid var(--teal);opacity:0;animation:pr 2s ease-out infinite}
+@keyframes pr{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.5);opacity:0}}
+.nc.completed{background:var(--teal);box-shadow:0 0 16px var(--teal-glow)}
+.nc.completed .ni{display:none}
+.nc.completed::after{content:'✓';font-size:22px;font-weight:800;color:#07070F}
+.nc.locked{background:var(--locked);border:1.5px solid rgba(255,255,255,.05)}
+.nc.locked .ni{font-size:18px;opacity:.35}
+.live-b{position:absolute;top:-2px;right:-2px;background:var(--orange);border-radius:8px;padding:2px 5px;font-size:8px;font-weight:800;color:#fff;text-transform:uppercase;animation:lp 2s ease-in-out infinite}
+@keyframes lp{0%,100%{box-shadow:0 0 8px rgba(249,115,22,.6)}50%{box-shadow:0 0 16px rgba(249,115,22,.9)}}
+.nl{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);white-space:nowrap}
+.nt{flex:1;padding-top:2px}
+.nn{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.2}
+.nc.locked~.nt .nn{color:var(--text-2)}
+.ntg{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-bottom:5px}
+.tg-se{background:rgba(0,212,170,.15);color:var(--teal)}
+.tg-cr{background:rgba(124,58,237,.2);color:#A78BFA}
+.tg-sa{background:rgba(245,158,11,.2);color:var(--amber)}
+.tg-iv{background:rgba(59,130,246,.15);color:#60A5FA}
+.tg-tx{background:rgba(16,185,129,.15);color:#34D399}
+.tg-pr{background:rgba(236,72,153,.15);color:#F472B6}
+.tg-ps{background:rgba(168,85,247,.15);color:#C084FC}
+.tg-nw{background:rgba(249,115,22,.15);color:var(--orange)}
+.tg-pl{background:rgba(20,184,166,.15);color:#2DD4BF}
+.tg-re{background:rgba(245,158,11,.15);color:#FCD34D}
+.tg-rt{background:rgba(99,102,241,.15);color:#818CF8}
+.tg-gl{background:rgba(14,165,233,.15);color:#38BDF8}
+.nts{font-size:11px;font-weight:500;color:var(--text-m);line-height:1.4}
+.nc.active~.nt .nts,.nc.completed~.nt .nts{color:var(--text-2)}
+.tooltip{position:fixed;z-index:500;background:#1A1A30;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;color:var(--text-2);max-width:200px;text-align:center;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.tooltip.show{opacity:1;transform:translateY(0)}
+.sr{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px 16px 0;margin-top:8px;margin-bottom:12px}
+.sc2{background:var(--card);border:1px solid rgba(255,255,255,.04);border-radius:12px;padding:14px 10px;text-align:center}
+.sci{font-size:20px;margin-bottom:6px}
+.scv{font-size:20px;font-weight:800;color:var(--text);margin-bottom:2px}
+.scv.teal{color:var(--teal)}.scv.amber{color:var(--amber)}
+.scl{font-size:10px;font-weight:600;color:var(--text-m);text-transform:uppercase;letter-spacing:.06em}
+.df{padding:28px 20px 16px;text-align:center}
+.df p{font-size:11px;color:var(--text-m);font-weight:500}
+.df span{display:inline-block;width:4px;height:4px;background:var(--teal);border-radius:50%;margin:0 6px;vertical-align:middle;opacity:.5}
+#wo{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;pointer-events:none}
+#wo.done{animation:ovf .5s ease 2.2s forwards}
+@keyframes ovf{to{opacity:0;pointer-events:none;visibility:hidden}}
+.wl{font-size:32px;font-weight:800;letter-spacing:-.8px;opacity:0;transform:translateY(8px) scale(.95);animation:wi .5s cubic-bezier(.34,1.56,.64,1) .2s forwards}
+.wl .lf{color:var(--teal)}.wl .sm{color:#fff}
+.wt{font-size:14px;font-weight:500;color:var(--text-2);opacity:0;animation:wi .4s ease .7s forwards}
+.wg{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,170,.12) 0%,transparent 70%);pointer-events:none;opacity:0;animation:wgf 1s ease .4s forwards}
+@keyframes wi{to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes wgf{to{opacity:1}}
+
+/* ── CHALLENGE SCREENS ── */
+.screen{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .32s cubic-bezier(.34,1.2,.64,1);max-width:430px;margin:0 auto;overflow-y:auto;overflow-x:hidden}
+.screen.open{transform:translateX(0)}
+@media(min-width:500px){.screen{border-radius:36px;overflow-y:auto;overflow-x:hidden}}
+.cnav{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;flex-shrink:0;position:sticky;top:0;z-index:10;background:var(--bg)}
+.nbk{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--text-2);transition:background .15s}
+.nbk:hover{background:var(--card-el)}
+.nhm{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text-2)}
+.pdots{display:flex;align-items:center;gap:6px}
+.pd{height:4px;border-radius:4px;background:var(--card-el);transition:all .3s}
+.pd.active{background:var(--teal);width:20px}.pd.done{background:var(--teal);opacity:.5;width:8px}.pd.inactive{width:8px}
+.sbody{flex:1;padding:8px 20px 80px;display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0}
+.ci-wrap{text-align:center;padding:32px 0 24px;display:flex;flex-direction:column;align-items:center;gap:16px;flex:1}
+.ci-icon{font-size:64px;filter:drop-shadow(0 0 24px rgba(0,212,170,.4))}
+.ci-tag{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:6px}
+.ci-title{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.15}
+.ci-desc{font-size:15px;font-weight:500;color:var(--text-2);line-height:1.65;max-width:300px}
+.ci-meta{display:flex;align-items:center;gap:20px;margin-top:8px}
+.ci-mi{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2)}
+.ci-mi span{font-size:16px}
+.vw{background:#000;border-radius:14px;overflow:hidden;position:relative;padding-bottom:56.25%;width:100%;margin:8px 0 20px}
+.vw iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.vlbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-m);margin-bottom:10px}
+.vtitle{font-size:18px;font-weight:700;margin-bottom:8px;line-height:1.3}
+.vdesc{font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:24px}
+.slide-card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.sv{height:160px;display:flex;align-items:center;justify-content:center;padding:20px}
+.sv.teal{background:linear-gradient(145deg,#0D2420 0%,#0A1A16 60%,var(--card) 100%)}
+.svc{text-align:center}
+.sbs{font-size:52px;font-weight:800;color:var(--teal);letter-spacing:-2px;line-height:1}
+.svs{font-size:12px;font-weight:600;color:var(--text-2);margin-top:6px}
+.s3{display:flex;gap:16px;justify-content:center}
+.s3i{text-align:center}
+.s3n{font-size:28px;font-weight:800;color:var(--teal);line-height:1}
+.s3l{font-size:10px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.sc3{padding:16px 18px 18px}
+.sl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:8px}
+.sh{font-size:18px;font-weight:800;line-height:1.25;margin-bottom:10px;letter-spacing:-.3px}
+.sb2{font-size:14px;font-weight:500;color:var(--text-2);line-height:1.65;margin-bottom:12px}
+.sco{border-left:3px solid var(--teal);padding:10px 12px;background:var(--teal-dim);border-radius:0 8px 8px 0;font-size:13px;font-weight:600;font-style:italic;line-height:1.5}
+.sdots{display:flex;justify-content:center;gap:6px;margin:12px 0 20px}
+.sdt{width:6px;height:6px;border-radius:50%;background:var(--card-el);transition:all .25s}
+.sdt.active{background:var(--teal);transform:scale(1.2)}
+.btn{width:100%;background:var(--teal);color:#07070F;border:none;border-radius:14px;padding:16px;font-size:16px;font-weight:800;font-family:var(--font);cursor:pointer;letter-spacing:-.2px;transition:opacity .15s,transform .15s,background .3s;box-shadow:0 0 24px rgba(0,212,170,.25);margin-top:20px}
+.btn.purple{background:#7C3AED;color:#fff;box-shadow:0 0 24px rgba(124,58,237,.3)}
+.btn.amber{background:var(--amber);color:#07070F;box-shadow:0 0 24px rgba(245,158,11,.3)}
+.btn:active{transform:scale(.98);opacity:.9}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn.ghost{background:none;border:none;color:var(--text-m);font-size:14px;font-weight:600;font-family:var(--font);cursor:pointer;padding:16px;margin-top:4px;box-shadow:none}
+
+/* SCAM SWIPE */
+.sw-hd{margin-bottom:16px}
+.sw-t{font-size:20px;font-weight:800;margin-bottom:6px}
+.sw-s{font-size:14px;font-weight:500;color:var(--text-2);line-height:1.5}
+.sw-p{font-size:12px;font-weight:700;color:var(--text-m);margin-top:8px}
+.sw-area{margin:8px 0 16px}
+.swc{background:var(--card-el);border:1px solid rgba(255,255,255,.06);border-radius:18px;overflow:hidden}
+.swc.fg{animation:fg .4s ease}
+.swc.fr{animation:fr .4s ease}
+.sms-hd{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.06)}
+.sms-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#334155,#1E293B);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#94A3B8;flex-shrink:0}
+.sms-meta{flex:1;min-width:0}
+.sms-from{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sms-sub{font-size:11px;color:var(--text-m);margin-top:1px}
+.sms-ts{font-size:11px;color:var(--text-m);white-space:nowrap}
+.sms-body{padding:12px 14px 14px}
+.sms-bubble{background:#1B2235;border-radius:4px 14px 14px 14px;padding:11px 13px;font-size:14px;font-weight:500;color:#E2E8F0;line-height:1.6;display:inline-block;max-width:100%}
+@keyframes fg{0%,100%{background:var(--card-el)}50%{background:rgba(16,185,129,.25)}}
+@keyframes fr{0%,100%{background:var(--card-el)}50%{background:rgba(239,68,68,.2)}}
+.sw-fr{font-size:11px;font-weight:700;color:var(--text-m);text-transform:uppercase;letter-spacing:.06em}
+.sw-fn{font-size:14px;font-weight:700;margin-top:2px}
+.sw-msg{font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;flex:1}
+.sw-ts{font-size:10px;color:var(--text-m);font-weight:500;align-self:flex-end}
+.sw-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.sw-btn{padding:14px;border-radius:12px;border:2px solid;font-size:14px;font-weight:800;font-family:var(--font);cursor:pointer;letter-spacing:.04em;text-transform:uppercase;transition:all .15s;background:transparent}
+.sw-btn:active{transform:scale(.96)}
+.sw-btn.lg{border-color:var(--ok);color:var(--ok)}.sw-btn.lg:hover{background:rgba(16,185,129,.1)}
+.sw-btn.sc{border-color:var(--bad);color:var(--bad)}.sw-btn.sc:hover{background:rgba(239,68,68,.1)}
+.sw-fb{display:none;margin-bottom:16px;border-radius:14px;overflow:hidden}
+.sw-fb.ok,.sw-fb.bad{display:block}
+.sw-fb-bar{display:flex;align-items:center;gap:8px;padding:12px 14px;font-size:14px;font-weight:800}
+.sw-fb.ok .sw-fb-bar{background:rgba(16,185,129,.15);color:#34D399}
+.sw-fb.bad .sw-fb-bar{background:rgba(239,68,68,.12);color:#F87171}
+.sw-fb-icon{font-size:18px;flex-shrink:0}
+.sw-fb-label{font-size:15px;font-weight:800;letter-spacing:.02em}
+.sw-fb-result{font-size:12px;font-weight:600;opacity:.8;margin-left:auto}
+.sw-fb-exp{padding:10px 14px 12px;font-size:13px;font-weight:500;color:var(--text-2);line-height:1.55;background:var(--card-el);border-top:1px solid rgba(255,255,255,.06)}
+
+/* CHECKLIST */
+.ck-t{font-size:20px;font-weight:800;margin-bottom:6px}
+.ck-s{font-size:14px;font-weight:500;color:var(--text-2);line-height:1.5;margin-bottom:20px}
+.ck-items{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.ck-item{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:0}
+.ck-item.chk{border-color:rgba(0,212,170,.2);background:rgba(0,212,170,.06)}
+.ck-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ck-txt{font-size:14px;font-weight:600;color:var(--text-2);flex:1;line-height:1.4}
+.ck-item.chk .ck-txt{color:#fff}
+.ck-tg{display:flex;gap:6px;flex-shrink:0}
+.tb{padding:6px 12px;border-radius:8px;border:1.5px solid rgba(255,255,255,.1);font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;background:transparent;color:var(--text-2);transition:all .15s}
+.tb.yes.on{border-color:var(--ok);color:var(--ok);background:rgba(16,185,129,.1)}
+.tb.no.on{border-color:var(--bad);color:var(--bad);background:rgba(239,68,68,.1)}
+.ck-score{background:var(--card);border-radius:14px;padding:16px;text-align:center;margin-bottom:16px}
+.ck-sn{font-size:40px;font-weight:800;color:var(--teal)}
+.ck-sl{font-size:13px;font-weight:600;color:var(--text-2);margin-top:4px}
+.ck-sm{font-size:14px;font-weight:600;margin-top:8px;line-height:1.5}
+
+/* QUIZ */
+.qz-ct{font-size:12px;font-weight:700;color:var(--text-m);text-align:right;margin-bottom:16px}
+.qz-lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:8px}
+.qz-q{font-size:19px;font-weight:800;line-height:1.3;margin-bottom:24px;letter-spacing:-.3px}
+.qz-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.qz-opt{background:var(--card);border:1.5px solid rgba(255,255,255,.06);border-radius:12px;padding:16px;font-size:15px;font-weight:600;color:var(--text-2);cursor:pointer;transition:all .2s;text-align:left;font-family:var(--font);line-height:1.4}
+.qz-opt:hover:not(:disabled){background:var(--card-el);border-color:rgba(255,255,255,.12);color:#fff}
+.qz-opt.ok{background:rgba(16,185,129,.12);border-color:var(--ok);color:#6EE7B7}
+.qz-opt.bad{background:rgba(239,68,68,.1);border-color:var(--bad);color:#FCA5A5}
+.qz-opt:disabled{cursor:default}
+.qz-exp{background:var(--card);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:12px 14px;font-size:13px;font-weight:600;color:var(--text-2);line-height:1.55;margin-bottom:20px;display:none}
+.qz-exp.show{display:block}
+
+/* CHALLENGE COMPLETE */
+.cc{display:flex;flex-direction:column;align-items:center;text-align:center;padding:48px 24px 40px;flex:1}
+.cc-iw{position:relative;margin-bottom:20px}
+.cc-ic{font-size:64px;animation:cb .6s cubic-bezier(.34,1.56,.64,1) .2s both}
+@keyframes cb{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+.cc-gl{position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,170,.3) 0%,transparent 70%);animation:cg 1s ease .3s both}
+@keyframes cg{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
+.cc-ti{font-size:24px;font-weight:800;letter-spacing:-.4px;margin-bottom:6px;animation:su .4s ease .5s both}
+.cc-sub{font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:28px;animation:su .4s ease .6s both}
+@keyframes su{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes cf{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.cc-xp{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px 28px;margin-bottom:20px;animation:su .4s ease .7s both}
+.cc-xn{font-size:36px;font-weight:800;color:var(--teal);letter-spacing:-1px}
+.cc-xl{font-size:12px;font-weight:600;color:var(--text-2);margin-top:2px}
+.cc-str{font-size:14px;font-weight:700;color:var(--amber);margin-bottom:12px;animation:su .4s ease .75s both}
+.cc-ins{background:var(--card);border-left:3px solid var(--teal);border-radius:0 12px 12px 0;padding:14px 16px;font-size:14px;font-weight:600;color:var(--text-2);line-height:1.55;font-style:italic;text-align:left;width:100%;margin-bottom:32px;animation:su .4s ease .85s both}
+
+/* LEVEL COMPLETE */
+.lc{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 24px;flex:1}
+.lc-flash{position:fixed;inset:0;background:rgba(255,255,255,.08);pointer-events:none;animation:lf .4s ease;z-index:10}
+@keyframes lf{0%{opacity:1}100%{opacity:0}}
+.lc-bw{position:relative;margin-bottom:20px;z-index:2}
+.lc-b{font-size:72px;animation:lb .7s cubic-bezier(.34,1.56,.64,1) .3s both}
+@keyframes lb{0%{transform:scale(0) rotate(-15deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+.lc-bg{position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,170,.4) 0%,transparent 65%);animation:lg 1.2s ease .4s both}
+@keyframes lg{0%{opacity:0;transform:scale(.3)}100%{opacity:1;transform:scale(1)}}
+.lc-ti{font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px;animation:su .4s ease .7s both}
+.lc-cat{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);animation:su .4s ease .8s both;margin-bottom:24px}
+.lc-xp{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:20px 32px;margin-bottom:16px;animation:su .4s ease .9s both}
+.lc-xn{font-size:40px;font-weight:800;color:var(--teal);letter-spacing:-1.5px}
+.lc-xl{font-size:12px;font-weight:600;color:var(--text-2);margin-top:2px}
+.lc-bn{font-size:15px;font-weight:700;color:#F59E0B;margin-top:8px}
+.lc-ul{font-size:13px;font-weight:600;color:var(--text-2);margin:12px 0 28px;animation:su .4s ease 1s both}
+.lc-mm{display:flex;align-items:center;gap:6px;margin-bottom:32px;animation:su .4s ease 1.05s both}
+.mm-d{width:10px;height:10px;border-radius:50%;background:var(--card-el)}
+.mm-d.done{background:var(--teal);box-shadow:0 0 6px rgba(0,212,170,.5)}
+.mm-d.cur{background:transparent;border:2px solid var(--teal)}
+.cp{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:600}
+.aglow{position:fixed;top:-100px;left:50%;transform:translateX(-50%);width:500px;height:400px;background:radial-gradient(ellipse,rgba(0,212,170,.05) 0%,transparent 65%);pointer-events:none;z-index:0}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="aglow"></div>
+  <header class="top-bar">
+    <div class="wm"><span class="l">Life</span><span class="s">Smart</span></div>
+    <div class="tp">
+      <div class="sp">🔥 <span class="sc" id="sc">0</span></div>
+      <div class="sp">⚡ <span class="xc" id="xc">0</span><span style="color:var(--text-m);font-weight:500;font-size:12px"> XP</span></div>
+    </div>
+  </header>
+  <div class="home-scroll">
+    <div class="greeting">
+      <div class="gl">Partner Demo</div>
+      <div class="gt">Your Financial Journey</div>
+      <div class="gs" id="gsub">3 levels unlocked · Start exploring</div>
+    </div>
+    <div class="sr">
+      <div class="sc2"><div class="sci">🔥</div><div class="scv amber" id="ss">0</div><div class="scl">Day Streak</div></div>
+      <div class="sc2"><div class="sci">⚡</div><div class="scv teal" id="sx">0</div><div class="scl">XP Earned</div></div>
+      <div class="sc2"><div class="sci">🏆</div><div class="scv" id="sl">0/3</div><div class="scl">Levels Done</div></div>
+      <div class="sc2" style="grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">🎯</span><span style="font-size:13px;font-weight:600;color:var(--text-2)">Best answer streak</span></div><div style="font-size:22px;font-weight:800;color:var(--amber)" id="sb">0</div></div>
+    </div>
+    <div class="xp-bar-wrap">
+      <div class="xp-bar-top"><span class="xp-bar-lbl">Level progress</span><span class="xp-bar-val" id="xpbv">0 / 850 XP</span></div>
+      <div class="xp-bar-track"><div class="xp-bar-fill" id="xpbf" style="width:0%"></div></div>
+    </div>
+    <div class="jl">Your path</div>
+    <div class="map-c" id="mc"><svg class="map-svg" id="msv" xmlns="http://www.w3.org/2000/svg"></svg><div class="map-n" id="mn"></div></div>
+    <div class="df"><p>Powered by LifeSmart Financial Education <span></span> demo.lifesmartfinance.com</p></div>
+  </div>
+</div>
+<div class="news-fab-lbl">📰 LIVE: Tariff Shock</div>
+<button class="news-fab" onclick="openNews()" title="Breaking: Tariff news">📰</button>
+<div class="combo-badge" id="comboBadge">🔥 On fire!</div>
+<div class="tooltip" id="tip"></div>
+<div id="wo"><div class="wg"></div><div class="wl"><span class="lf">Life</span><span class="sm">Smart</span></div><div class="wt">Financial education that actually sticks</div></div>
+
+<!-- CHALLENGE SCREEN -->
+<div class="screen" id="cs">
+  <div class="cnav">
+    <div class="nbk" onclick="cBack()">←</div>
+    <div class="pdots" id="pdots"></div>
+    <div class="nhm" onclick="holdHome()" title="Save progress &amp; go home">⌂</div>
+  </div>
+
+  <!-- C1 INTRO -->
+  <div class="sbody" id="s0" style="display:none">
+    <div class="ci-wrap">
+      <div class="ci-icon">🛡️</div>
+      <div class="ci-tag tg-se">SECURITY</div>
+      <div class="ci-title">Can You Spot the Scam?</div>
+      <div class="ci-desc">Learn how scammers exploit psychology, then test your instincts against six real-world messages.</div>
+      <div class="ci-meta">
+        <div class="ci-mi"><span>🎬</span> 1 video</div>
+        <div class="ci-mi"><span>📖</span> 2 slides</div>
+        <div class="ci-mi"><span>🎯</span> Interactive</div>
+        <div class="ci-mi"><span>⚡</span> 100 XP</div>
+      </div>
+    </div>
+    <button class="btn" onclick="ns()">Let's go →</button>
+  </div>
+
+  <!-- C1 VIDEO -->
+  <div class="sbody" id="s1" style="display:none">
+    <div class="vlbl">Watch first · 2 min</div>
+    <div class="vph" onclick="window.open('https://youtu.be/gDydjXMEQ60','_blank')"><div class="vph-play">▶</div><div class="vph-name">The Psychology of Money</div><div class="vph-hint">Tap to watch on YouTube</div></div>
+    <div class="vtitle">The Psychology of Money</div>
+    <div class="vdesc">Understanding the emotions behind financial decisions — the same forces scammers exploit to catch people off guard.</div>
+    <button class="btn" onclick="ns()">Continue →</button>
+  </div>
+
+  <!-- C1 SLIDE 1 -->
+  <div class="sbody" id="s2" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 1 OF 2</div>
+    <div class="slide-card">
+      <div class="sv teal"><div class="svc"><div class="sbs">1 in 3</div><div class="svs">adults encounter a financial scam each year</div></div></div>
+      <div class="sc3">
+        <div class="sh">Most victims never saw it coming</div>
+        <div class="sb2">Research consistently shows that scam victims describe themselves as too intelligent to fall for it — right up until the moment they do. Scammers do not target weakness. They target trust.</div>
+        <div class="sco">The most effective scams feel completely normal until it is too late.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt active"></div><div class="sdt"></div></div>
+    <button class="btn" onclick="ns()">Next →</button>
+  </div>
+
+  <!-- C1 SLIDE 2 -->
+  <div class="sbody" id="s3" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 2 OF 2</div>
+    <div style="font-size:22px;font-weight:800;line-height:1.25;margin-bottom:6px;letter-spacing:-.4px">The 3 weapons every scammer uses</div>
+    <div style="font-size:14px;font-weight:500;color:var(--text-2);margin-bottom:20px;line-height:1.5">Every effective scam uses at least two. Once you can name them, they lose their power.</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      <div style="background:linear-gradient(135deg,#071A14,#0A2018);border:1px solid rgba(0,212,170,.18);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,212,170,.15);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:var(--teal);flex-shrink:0">1</div>
+        <div><div style="font-size:16px;font-weight:800;color:var(--teal);letter-spacing:.02em">URGENCY</div><div style="font-size:13px;color:var(--text-2);margin-top:2px">Act now, think later</div></div>
+      </div>
+      <div style="background:linear-gradient(135deg,#0F0A1F,#1A0F30);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(124,58,237,.15);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#A78BFA;flex-shrink:0">2</div>
+        <div><div style="font-size:16px;font-weight:800;color:#A78BFA;letter-spacing:.02em">AUTHORITY</div><div style="font-size:13px;color:var(--text-2);margin-top:2px">Trust without questioning</div></div>
+      </div>
+      <div style="background:linear-gradient(135deg,#1A0808,#2D0E0E);border:1px solid rgba(239,68,68,.18);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px">
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(239,68,68,.12);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#F87171;flex-shrink:0">3</div>
+        <div><div style="font-size:16px;font-weight:800;color:#F87171;letter-spacing:.02em">FEAR</div><div style="font-size:13px;color:var(--text-2);margin-top:2px">Cloud your judgement</div></div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.04);border-left:3px solid var(--teal);border-radius:0 10px 10px 0;padding:12px 14px;margin-bottom:20px;font-size:13px;font-weight:600;font-style:italic;color:var(--text-2);line-height:1.5">"Your account will be frozen in 24 hours" — uses all three at once.</div>
+    <div class="sdots"><div class="sdt"></div><div class="sdt active"></div></div>
+    <button class="btn" onclick="ns()">Start the Challenge →</button>
+  </div>
+
+  <!-- SCAM SWIPE -->
+  <div class="sbody" id="s4" style="display:none">
+    <div class="sw-hd">
+      <div class="sw-t">Scam or Legit?</div>
+      <div class="sw-s">Read each message and decide. Trust your gut, then we'll explain why.</div>
+      <div class="sw-p" id="swp">Card 1 of 6</div>
+    </div>
+    <div class="sw-area" id="swa"></div>
+    <div class="sw-fb" id="swfb"></div>
+    <div class="sw-btns" id="swbtns">
+      <button class="sw-btn lg" onclick="swAns('legit')">✓ Legit</button>
+      <button class="sw-btn sc" onclick="swAns('scam')">⚠ Scam</button>
+    </div>
+    <button class="btn" id="swnxt" style="display:none" onclick="swNext()">Next →</button>
+    <button class="btn" id="swfin" style="display:none" onclick="ns()">See my results →</button>
+  </div>
+
+  <!-- C1 QUIZ -->
+  <div class="sbody" id="s5" style="display:none">
+    <div class="qz-ct" id="qc1">Question 1 of 3</div>
+    <div class="qz-lbl">CHECKPOINT</div>
+    <div class="qz-q" id="qq1"></div>
+    <div class="qz-opts" id="qo1"></div>
+    <div class="qz-exp" id="qe1"></div>
+    <button class="btn" id="qn1" style="display:none" onclick="qNext(1)">Next →</button>
+  </div>
+
+  <!-- C1 COMPLETE -->
+  <div class="sbody" id="s6" style="display:none">
+    <div class="cc">
+      <div class="cc-iw"><div class="cc-gl"></div><div class="cc-ic">✅</div></div>
+      <div class="cc-ti">Challenge Complete</div>
+      <div class="cc-sub">Can You Spot the Scam?</div>
+      <div class="cc-xp"><div class="cc-xn">+100 XP</div><div class="cc-xl">Added to your total</div></div>
+      <div class="cc-str" id="cstr1">🔥 1 in a row</div>
+      <div class="cc-ins">Scammers rely on you not recognising the pattern. Now you do. You are harder to fool than most people who have never seen this breakdown.</div>
+      <button class="btn" onclick="startC2()">Continue to Challenge 2 →</button>
+    </div>
+  </div>
+
+  <!-- C2 INTRO -->
+  <div class="sbody" id="s7" style="display:none">
+    <div class="ci-wrap">
+      <div class="ci-icon">🔐</div>
+      <div class="ci-tag tg-se">SECURITY</div>
+      <div class="ci-title">Secure Your Money</div>
+      <div class="ci-desc">Phishing, fake apps, and account takeover are the most common threats to your money. Learn the signals and check your own security.</div>
+      <div class="ci-meta">
+        <div class="ci-mi"><span>🎬</span> 1 video</div>
+        <div class="ci-mi"><span>📖</span> 2 slides</div>
+        <div class="ci-mi"><span>✅</span> Health check</div>
+        <div class="ci-mi"><span>⚡</span> 100 XP</div>
+      </div>
+    </div>
+    <button class="btn" onclick="ns()">Let's go →</button>
+  </div>
+
+  <!-- C2 VIDEO -->
+  <div class="sbody" id="s8" style="display:none">
+    <div class="vlbl">Watch first · 2 min</div>
+    <div class="vph" onclick="window.open('https://youtu.be/UsQAXVjzbcs','_blank')"><div class="vph-play">▶</div><div class="vph-name">Banking Basics</div><div class="vph-hint">Tap to watch on YouTube</div></div>
+    <div class="vtitle">Banking Basics</div>
+    <div class="vdesc">How modern banking works and the gaps that fraudsters use to target your accounts.</div>
+    <button class="btn" onclick="ns()">Continue →</button>
+  </div>
+
+  <!-- C2 SLIDE 1 -->
+  <div class="sbody" id="s9" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 1 OF 2</div>
+    <div class="slide-card">
+      <div class="sv teal"><div class="svc"><div class="sbs">$330M</div><div class="svs">lost to phishing attacks last year</div></div></div>
+      <div class="sc3">
+        <div class="sh">Phishing is the most profitable crime online</div>
+        <div class="sb2">Phishing attacks trick people into handing over login details by pretending to be a trusted company. The messages look increasingly convincing, but the warning signs are always there if you know where to look.</div>
+        <div class="sco">If you are being asked to confirm information, ask yourself: who actually needs this from me right now?</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt active"></div><div class="sdt"></div></div>
+    <button class="btn" onclick="ns()">Next →</button>
+  </div>
+
+  <!-- C2 SLIDE 2 -->
+  <div class="sbody" id="s10" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 2 OF 2</div>
+    <div class="slide-card">
+      <div class="sv teal"><div class="svc"><div style="font-size:40px">🏦</div><div class="svs" style="color:var(--bad);font-weight:700;font-size:13px">Your bank will NEVER ask for:</div></div></div>
+      <div class="sc3">
+        <div class="sh">Four things no bank will ever request</div>
+        <div class="sb2">Your one-time passcode. Your full PIN. Your complete password. Remote access to your device. Any message asking for these — even if it looks official — is fraud. Banks are trained never to need this information from you.</div>
+        <div class="sco">Hang up. Call the number on the back of your card. That call is always safe.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt"></div><div class="sdt active"></div></div>
+    <button class="btn" onclick="ns()">Take the Security Check →</button>
+  </div>
+
+  <!-- SECURITY CHECKLIST -->
+  <div class="sbody" id="s11" style="display:none">
+    <div class="ck-t">Security Health Check</div>
+    <div class="ck-s">Answer honestly. This takes 60 seconds and could protect you from the most common attacks.</div>
+    <div class="ck-items" id="cki"></div>
+    <div class="ck-score" id="cks" style="display:none"><div class="ck-sn" id="ckn">0/5</div><div class="ck-sl">Security habits in place</div><div class="ck-sm" id="ckm"></div></div>
+    <button class="btn" id="cksb" disabled onclick="submitCk()">See my score →</button>
+    <button class="btn" id="ckcb" style="display:none;margin-top:10px" onclick="ns()">Continue →</button>
+  </div>
+
+  <!-- C2 QUIZ -->
+  <div class="sbody" id="s12" style="display:none">
+    <div class="qz-ct" id="qc2">Question 1 of 3</div>
+    <div class="qz-lbl">CHECKPOINT</div>
+    <div class="qz-q" id="qq2"></div>
+    <div class="qz-opts" id="qo2"></div>
+    <div class="qz-exp" id="qe2"></div>
+    <button class="btn" id="qn2" style="display:none" onclick="qNext(2)">Next →</button>
+  </div>
+
+  <!-- C2 COMPLETE -->
+  <div class="sbody" id="s13" style="display:none">
+    <div class="cc">
+      <div class="cc-iw"><div class="cc-gl"></div><div class="cc-ic">🔐</div></div>
+      <div class="cc-ti">Challenge Complete</div>
+      <div class="cc-sub">Secure Your Money</div>
+      <div class="cc-xp"><div class="cc-xn">+100 XP</div><div class="cc-xl">Added to your total</div></div>
+      <div class="cc-str">🔥 2 in a row</div>
+      <div class="cc-ins">Account takeover succeeds because most people assume it could never happen to them. Knowing the four things your bank will never ask puts you ahead of the vast majority.</div>
+      <button class="btn" onclick="showLC()">See Level Results →</button>
+    </div>
+  </div>
+
+  <!-- LEVEL COMPLETE -->
+  <div class="sbody" id="s14" style="display:none">
+    <div id="lcfl" style="display:none" class="lc-flash"></div>
+    <div class="lc">
+      <div class="lc-bw"><div class="lc-bg"></div><div class="lc-b">🏅</div></div>
+      <div class="lc-ti">Scam Shield Complete!</div>
+      <div class="lc-cat">SECURITY</div>
+      <div class="lc-xp"><div class="lc-xn">250 XP</div><div class="lc-xl">Total earned this level</div><div class="lc-bn">🥇 Fraud Fighter — Unlocked</div></div>
+      <div class="lc-ul">Level 2 is now live: Debt Decoded</div>
+      <div class="lc-mm">
+        <div class="mm-d done"></div>
+        <div style="width:16px;height:2px;background:var(--teal);opacity:.4;border-radius:1px"></div>
+        <div class="mm-d cur"></div>
+        <div style="width:16px;height:2px;background:var(--text-m);opacity:.3;border-radius:1px"></div>
+        <div class="mm-d"></div>
+        <div style="width:16px;height:2px;background:var(--text-m);opacity:.2;border-radius:1px"></div>
+        <div class="mm-d" style="opacity:.3"></div>
+      </div>
+      <button class="btn" onclick="goHome()">Back to Journey Map →</button>
+    </div>
+  </div>
+
+
+  <!-- ════ LEVEL 2 — DEBT DECODED ════ -->
+  <!-- L2 C3 Intro -->
+  <div class="sbody" id="s15" style="display:none">
+    <div style="text-align:center;padding-top:8px">
+      <div style="font-size:56px;margin-bottom:14px">💳</div>
+      <div class="ctag tg-cr" style="display:inline-block;margin-bottom:12px">CREDIT</div>
+      <div style="font-size:24px;font-weight:800;letter-spacing:-.4px;margin-bottom:10px">How Debt Really Works</div>
+      <div style="font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:24px">Most people have no idea how much interest they are actually paying. This challenge reveals the real numbers.</div>
+      <div class="intro-chips"><div class="chip">🎬 1 video</div><div class="chip">📖 2 insights</div><div class="chip">📊 Debt simulator</div><div class="chip">⚡ +150 XP</div></div>
+      <button class="btn" onclick="ns()">Let's go →</button>
+    </div>
+  </div>
+  <!-- L2 C3 Video -->
+  <div class="sbody" id="s16" style="display:none">
+    <div class="vlbl">Watch first · 2 min</div>
+    <div class="vph" onclick="window.open('https://youtu.be/nQC853JqCL4','_blank')"><div class="vph-play">▶</div><div class="vph-name">How Credit Actually Works</div><div class="vph-hint">Tap to watch on YouTube</div></div>
+    <div class="vtitle">How Credit Actually Works</div>
+    <div class="vdesc">A clear walkthrough of how credit works in the financial system and what it actually costs you.</div>
+    <button class="btn" onclick="ns()">Continue →</button>
+  </div>
+  <!-- L2 C3 Slide 1 -->
+  <div class="sbody" id="s17" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 1 OF 2</div>
+    <div class="slide-card">
+      <div class="sv purple"><div class="svc"><div class="sbs" style="color:#A78BFA">£100</div><div class="svs" style="color:rgba(167,139,250,.6)">in interest — month one alone</div></div></div>
+      <div class="sc3">
+        <div class="sh">Interest never sleeps</div>
+        <div class="sb2">Every day you carry a credit card balance, interest compounds. At a typical 29.9% APR, a £4,000 balance accumulates around £100 in interest in month one alone — before you have made a single new purchase.</div>
+        <div class="sco callout-purple">Banks make more money when you pay less each month.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt active"></div><div class="sdt"></div></div>
+    <button class="btn" onclick="ns()">Next →</button>
+  </div>
+  <!-- L2 C3 Slide 2 -->
+  <div class="sbody" id="s18" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 2 OF 2</div>
+    <div class="slide-card">
+      <div class="sv purple"><div class="svc" style="display:grid;grid-template-columns:1fr 1fr;gap:1px;width:100%;height:100%">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(239,68,68,.08)"><div style="font-size:11px;font-weight:700;color:#F87171;letter-spacing:.06em">MINIMUM</div><div style="font-size:22px;font-weight:800;color:#F87171">52+ months</div><div style="font-size:10px;color:rgba(248,113,113,.5)">to clear £4,000</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(52,211,153,.08)"><div style="font-size:11px;font-weight:700;color:#34D399;letter-spacing:.06em">HIGHER PAYMENT</div><div style="font-size:22px;font-weight:800;color:#34D399">8 months</div><div style="font-size:10px;color:rgba(52,211,153,.5)">same debt cleared</div></div>
+      </div></div>
+      <div class="sc3">
+        <div class="sh">The Minimum Payment Trap</div>
+        <div class="sb2">Credit card minimum payments are calculated to keep you paying for as long as possible. Paying the minimum on a £4,000 balance at 29.9% APR takes over 4 years to clear and costs thousands in interest.</div>
+        <div class="sco callout-purple">The minimum payment is not a target. It is a floor.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt"></div><div class="sdt active"></div></div>
+    <button class="btn" onclick="ns()">Start the Challenge →</button>
+  </div>
+  <!-- L2 C3 Debt Simulator -->
+  <div class="sbody" id="s19" style="display:none">
+    <div style="font-size:20px;font-weight:800;margin-bottom:6px">The Interest Trap</div>
+    <div style="background:linear-gradient(135deg,#0F0A1F,#1A0F30);border:1px solid rgba(124,58,237,.2);border-radius:14px;padding:16px;margin-bottom:14px">
+      <div style="font-size:13px;color:var(--text-2);line-height:1.6">You borrowed <strong style="color:#fff">£3,000</strong> on a credit card. The bank's minimum payment is <strong style="color:#A78BFA">£120/month</strong>. Slide to see what happens.</div>
+      <div style="display:flex;gap:16px;margin-top:10px">
+        <div style="flex:1;text-align:center"><div style="font-size:18px;font-weight:800;color:#fff">£3,000</div><div style="font-size:10px;font-weight:600;color:var(--text-m);text-transform:uppercase">Borrowed</div></div>
+        <div style="width:1px;background:rgba(255,255,255,.08)"></div>
+        <div style="flex:1;text-align:center"><div style="font-size:18px;font-weight:800;color:#A78BFA">29.9%</div><div style="font-size:10px;font-weight:600;color:var(--text-m);text-transform:uppercase">APR</div></div>
+        <div style="width:1px;background:rgba(255,255,255,.08)"></div>
+        <div style="flex:1;text-align:center"><div style="font-size:18px;font-weight:800;color:#A78BFA">£120</div><div style="font-size:10px;font-weight:600;color:var(--text-m);text-transform:uppercase">Minimum</div></div>
+      </div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px"><span style="font-size:13px;font-weight:600;color:var(--text-2)">Monthly payment</span><span style="font-size:24px;font-weight:800;color:#A78BFA" id="dslv">£120</span></div>
+      <input type="range" id="dslider" min="120" max="500" step="10" value="120" oninput="updateDebt(this.value)" style="width:100%">
+      <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-top:4px"><span style="color:#F87171">← minimum (£120)</span><span style="color:#34D399">£500 max →</span></div>
+    </div>
+    <div class="sim-stats">
+      <div class="sim-stat"><div class="sim-stat-lbl">Pay off in</div><div class="sim-stat-val" id="dmo">—</div></div>
+      <div class="sim-stat"><div class="sim-stat-lbl">Interest Paid</div><div class="sim-stat-val" id="dint" style="color:#F87171">—</div></div>
+      <div class="sim-stat"><div class="sim-stat-lbl">You could have saved</div><div class="sim-stat-val" id="dtot" style="color:#34D399">—</div></div>
+    </div>
+    <div class="sim-graph">
+      <div class="sim-graph-title">Cumulative interest charged over 24 months</div>
+      <canvas id="debtCanvas" height="150" style="width:100%;display:block;border-radius:6px"></canvas>
+      <div class="sim-legend">
+        <div class="sim-leg-item"><div class="sim-leg-dot" style="background:#F87171"></div>At your payment</div>
+        <div class="sim-leg-item"><div class="sim-leg-dot" style="background:#34D399;border-radius:1px;height:3px;width:14px"></div>At £500/mo (fast)</div>
+      </div>
+    </div>
+    <div class="sim-insight" id="dinsight" style="font-size:13px;font-weight:600;line-height:1.6;text-align:center;color:var(--text-2);margin-bottom:16px"></div>
+    <button class="btn" onclick="ns()">I've seen enough →</button>
+  </div>
+  <!-- L2 C3 Quiz -->
+  <div class="sbody" id="s20" style="display:none">
+    <div class="qz-lbl">CHECKPOINT</div>
+    <div class="qz-ct" id="qc3">Question 1 of 3</div>
+    <div class="qz-q" id="qq3"></div>
+    <div class="qz-opts" id="qo3"></div>
+    <div class="qz-exp" id="qe3"></div>
+    <button class="btn" id="qn3" style="display:none" onclick="qNext(3)">Next →</button>
+  </div>
+  <!-- L2 C3 Result -->
+  <div class="sbody" id="s21" style="display:none">
+    <div class="cc">
+      <div class="cc-iw"><div class="cc-gl"></div><div class="cc-ic">💳</div></div>
+      <div class="cc-ti">Challenge Complete</div>
+      <div class="cc-sub">How Debt Really Works</div>
+      <div class="cc-xp"><div class="cc-xn">+150 XP</div><div class="cc-xl">Added to your total</div></div>
+      <div class="cc-str" id="c3str">🔥 3 in a row</div>
+      <div class="cc-ins">The minimum payment is not a goal — it is a trap. Every extra pound you pay saves you multiples in interest over time.</div>
+      <button class="btn" onclick="startL2C4()">Continue to Challenge 4 →</button>
+    </div>
+  </div>
+
+  <!-- L2 C4 Intro -->
+  <div class="sbody" id="s22" style="display:none">
+    <div style="text-align:center;padding-top:8px">
+      <div style="font-size:56px;margin-bottom:14px">📊</div>
+      <div class="ctag tg-cr" style="display:inline-block;margin-bottom:12px">CREDIT</div>
+      <div style="font-size:24px;font-weight:800;letter-spacing:-.4px;margin-bottom:10px">Credit in Real Life</div>
+      <div style="font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:24px">Your credit score affects mortgages, loans, and rental applications. Understand what actually moves it.</div>
+      <div class="intro-chips"><div class="chip">🎬 1 video</div><div class="chip">📖 2 insights</div><div class="chip">🎯 Myth vs Fact</div><div class="chip">⚡ +100 XP</div></div>
+      <button class="btn" onclick="ns()">Let's go →</button>
+    </div>
+  </div>
+  <!-- L2 C4 Video -->
+  <div class="sbody" id="s23" style="display:none">
+    <div class="vlbl">Watch first · 2 min</div>
+    <div class="vph" onclick="window.open('https://youtu.be/6rXsLW3wXUQ','_blank')"><div class="vph-play">▶</div><div class="vph-name">The Hidden Cost of Minimum Payments</div><div class="vph-hint">Tap to watch on YouTube</div></div>
+    <div class="vtitle">The Hidden Cost of Minimum Payments</div>
+    <div class="vdesc">Why the minimum payment on your credit card is one of the most expensive choices you can make.</div>
+    <button class="btn" onclick="ns()">Continue →</button>
+  </div>
+  <!-- L2 C4 Slide 1 -->
+  <div class="sbody" id="s24" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 1 OF 2</div>
+    <div class="slide-card">
+      <div class="sv purple"><div class="svc" style="flex-direction:column;gap:4px;width:100%;padding:0 12px">
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:11px;font-weight:800;color:#A78BFA;min-width:28px;text-align:right">35%</span><span style="font-size:12px;font-weight:600">Payment history</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:11px;font-weight:800;color:#A78BFA;min-width:28px;text-align:right">30%</span><span style="font-size:12px;font-weight:600">Credit utilisation</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:11px;font-weight:800;color:#A78BFA;min-width:28px;text-align:right">15%</span><span style="font-size:12px;font-weight:600">Credit history length</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)"><span style="font-size:11px;font-weight:800;color:#A78BFA;min-width:28px;text-align:right">10%</span><span style="font-size:12px;font-weight:600">New applications</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0"><span style="font-size:11px;font-weight:800;color:#A78BFA;min-width:28px;text-align:right">10%</span><span style="font-size:12px;font-weight:600">Credit mix</span></div>
+      </div></div>
+      <div class="sc3">
+        <div class="sh">5 things that build your credit score</div>
+        <div class="sb2">Your credit score is a number lenders use to decide whether to lend to you and at what rate. Knowing what moves it means you can actively improve it over time.</div>
+        <div class="sco callout-purple">Your payment history alone counts for 35% of your score.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt active"></div><div class="sdt"></div></div>
+    <button class="btn" onclick="ns()">Next →</button>
+  </div>
+  <!-- L2 C4 Slide 2 -->
+  <div class="sbody" id="s25" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 2 OF 2</div>
+    <div class="slide-card">
+      <div class="sv purple"><div class="svc" style="display:grid;grid-template-columns:1fr 1fr;gap:1px;width:100%;height:100%">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(239,68,68,.08)"><div style="font-size:11px;font-weight:800;color:#F87171;letter-spacing:.06em">MYTH</div><div style="font-size:12px;font-weight:600;color:var(--text-2);text-align:center;padding:0 8px">Common beliefs that cost people money</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(52,211,153,.08)"><div style="font-size:11px;font-weight:800;color:#34D399;letter-spacing:.06em">FACT</div><div style="font-size:12px;font-weight:600;color:var(--text-2);text-align:center;padding:0 8px">What actually drives your score</div></div>
+      </div></div>
+      <div class="sc3">
+        <div class="sh">Most people believe things about credit that are simply not true</div>
+        <div class="sb2">Credit myths cost people money every year — they avoid credit when they should build it, or damage their score through misunderstanding. Knowing the facts puts you ahead.</div>
+        <div class="sco callout-purple">Checking your own credit score does NOT lower it. That is a myth.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt"></div><div class="sdt active"></div></div>
+    <button class="btn" onclick="ns()">Start the Challenge →</button>
+  </div>
+  <!-- L2 C4 Myth vs Fact -->
+  <div class="sbody" id="s26" style="display:none">
+    <div style="font-size:20px;font-weight:800;margin-bottom:6px">Myth or Fact?</div>
+    <div style="font-size:13px;font-weight:500;color:var(--text-2);margin-bottom:4px">Tap your answer for each credit statement.</div>
+    <div style="font-size:11px;font-weight:700;color:var(--text-m);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px" id="mvfp">Statement 1 of 6</div>
+    <div class="mvf-card" id="mvfcard"></div>
+    <div class="mvf-fb" id="mvffb"></div>
+    <div class="mvf-btns" id="mvfbtns">
+      <button class="mvf-btn mvf-myth" onclick="mvfAns('myth')">MYTH</button>
+      <button class="mvf-btn mvf-fact" onclick="mvfAns('fact')">FACT</button>
+    </div>
+    <div id="mvfnxt" style="display:none"><button class="btn" onclick="mvfNext()">Next →</button></div>
+    <div id="mvffin" style="display:none"><div class="mvf-score-wrap"><div style="font-size:38px;font-weight:800;color:var(--teal)" id="mvfscore">0/6</div><div style="font-size:13px;font-weight:500;color:var(--text-2);margin-top:6px" id="mvfmsg"></div></div><button class="btn" onclick="ns()">Continue to Quiz →</button></div>
+  </div>
+  <!-- L2 C4 Quiz -->
+  <div class="sbody" id="s27" style="display:none">
+    <div class="qz-lbl">CHECKPOINT</div>
+    <div class="qz-ct" id="qc4">Question 1 of 3</div>
+    <div class="qz-q" id="qq4"></div>
+    <div class="qz-opts" id="qo4"></div>
+    <div class="qz-exp" id="qe4"></div>
+    <button class="btn" id="qn4" style="display:none" onclick="qNext(4)">Next →</button>
+  </div>
+  <!-- L2 C4 Result -->
+  <div class="sbody" id="s28" style="display:none">
+    <div class="cc">
+      <div class="cc-iw"><div class="cc-gl" style="background:radial-gradient(circle,rgba(124,58,237,.3) 0%,transparent 70%)"></div><div class="cc-ic">📊</div></div>
+      <div class="cc-ti">Challenge Complete</div>
+      <div class="cc-sub">Credit in Real Life</div>
+      <div class="cc-xp"><div class="cc-xn" style="color:#A78BFA">+100 XP</div><div class="cc-xl">Added to your total</div></div>
+      <div class="cc-ins">Your credit score is not a mystery. It is a number you can understand and actively improve — starting with the habits you control right now.</div>
+      <button class="btn" onclick="showL2C()">Complete Level 2 →</button>
+    </div>
+  </div>
+  <!-- Level 2 Complete -->
+  <div class="sbody" id="s29" style="display:none">
+    <div id="lcfl2" style="display:none" class="lc-flash" style="background:rgba(124,58,237,.15)"></div>
+    <div class="lc">
+      <div class="lc-bw"><div class="lc-bg" style="background:radial-gradient(circle,rgba(124,58,237,.25) 0%,transparent 70%)"></div><div class="lc-b">🏅</div></div>
+      <div class="lc-ti">Debt Decoded Complete!</div>
+      <div class="lc-cat" style="background:rgba(124,58,237,.2);color:#A78BFA">CREDIT</div>
+      <div class="lc-xp" style="border-color:rgba(124,58,237,.25)"><div class="lc-xn" style="color:#A78BFA">300 XP</div><div class="lc-xl">Total earned this level</div><div class="lc-bn">🥇 Credit Confident — Unlocked</div></div>
+      <div class="lc-ul">Level 3 is now live: The Cost of Waiting</div>
+      <div class="lc-mm">
+        <div class="mm-d done"></div><div style="width:16px;height:2px;background:var(--teal);opacity:.4;border-radius:1px"></div>
+        <div class="mm-d done" style="background:var(--purple);box-shadow:0 0 8px rgba(124,58,237,.5)"></div><div style="width:16px;height:2px;background:var(--purple);opacity:.3;border-radius:1px"></div>
+        <div class="mm-d cur" style="border-color:var(--amber)"></div><div style="width:16px;height:2px;background:var(--text-m);opacity:.2;border-radius:1px"></div>
+        <div class="mm-d" style="opacity:.2"></div>
+      </div>
+      <button class="btn" onclick="startL3()">Start Level 3 →</button>
+      <button class="btn-ghost" onclick="goHome()">Back to Journey Map</button>
+    </div>
+  </div>
+
+  <!-- ════ LEVEL 3 — THE COST OF WAITING ════ -->
+  <!-- L3 C5 Intro -->
+  <div class="sbody" id="s30" style="display:none">
+    <div style="text-align:center;padding-top:8px">
+      <div style="font-size:56px;margin-bottom:14px">⏳</div>
+      <div class="ctag tg-sa" style="display:inline-block;margin-bottom:12px">SAVING</div>
+      <div style="font-size:24px;font-weight:800;letter-spacing:-.4px;margin-bottom:10px">The Earlier You Start</div>
+      <div style="font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:24px">Starting to save just 5 years earlier can be worth more than doubling your monthly contributions. See why.</div>
+      <div class="intro-chips"><div class="chip">🎬 1 video</div><div class="chip">📖 2 insights</div><div class="chip">📊 Growth simulator</div><div class="chip">⚡ +150 XP</div></div>
+      <button class="btn" onclick="ns()">Let's go →</button>
+    </div>
+  </div>
+  <!-- L3 C5 Video -->
+  <div class="sbody" id="s31" style="display:none">
+    <div class="vlbl">Watch first · 2 min</div>
+    <div class="vph" onclick="window.open('https://youtu.be/RnGmJnG9TjU','_blank')"><div class="vph-play">▶</div><div class="vph-name">Time Value of Money</div><div class="vph-hint">Tap to watch on YouTube</div></div>
+    <div class="vtitle">Time Value of Money</div>
+    <div class="vdesc">Why a pound today is worth more than a pound tomorrow — and what that means for your financial future.</div>
+    <button class="btn" onclick="ns()">Continue →</button>
+  </div>
+  <!-- L3 C5 Slide 1 -->
+  <div class="sbody" id="s32" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 1 OF 2</div>
+    <div class="slide-card">
+      <div class="sv amber"><div class="svc" style="display:grid;grid-template-columns:1fr 1fr;gap:1px;width:100%;height:100%">
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(0,212,170,.08)"><div style="font-size:13px;font-weight:800;color:var(--teal)">ALEX</div><div style="font-size:11px;font-weight:500;color:var(--text-2)">Starts at 25</div><div style="font-size:11px;font-weight:500;color:var(--text-2)">Saves 10 years</div><div style="font-size:11px;font-weight:700;color:var(--teal)">MORE MONEY ↑</div></div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(255,255,255,.03)"><div style="font-size:13px;font-weight:800;color:var(--text-2)">JORDAN</div><div style="font-size:11px;font-weight:500;color:var(--text-2)">Starts at 35</div><div style="font-size:11px;font-weight:500;color:var(--text-2)">Saves 30 years</div><div style="font-size:11px;font-weight:700;color:var(--text-m)">Less at 65</div></div>
+      </div></div>
+      <div class="sc3">
+        <div class="sh">Starting early beats saving more</div>
+        <div class="sb2">Alex saves for just 10 years then stops. Jordan saves for 30 years straight with the same monthly amount. Assuming 7% annual growth, Alex ends up with significantly more at retirement. Time is the variable most people underestimate.</div>
+        <div class="sco callout-amber">Compound growth turns time into money.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt active"></div><div class="sdt"></div></div>
+    <button class="btn" onclick="ns()">Next →</button>
+  </div>
+  <!-- L3 C5 Slide 2 -->
+  <div class="sbody" id="s33" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 2 OF 2</div>
+    <div class="slide-card">
+      <div class="sv amber"><div class="svc"><div class="sbs" style="color:var(--amber)">7%</div><div class="svs" style="color:rgba(245,158,11,.6)">average annual growth assumed</div></div></div>
+      <div class="sc3">
+        <div class="sh">The 8th Wonder of the World</div>
+        <div class="sb2">Every pound of growth earns further growth. Those returns earn returns. Over 40 years, this effect becomes extraordinary. The curve that starts flat and then explodes upward is one of the most important shapes in personal finance.</div>
+        <div class="sco callout-amber">The longer money compounds, the less you need to add.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt"></div><div class="sdt active"></div></div>
+    <button class="btn" onclick="ns()">Start the Challenge →</button>
+  </div>
+  <!-- L3 C5 Cost of Waiting Simulator -->
+  <div class="sbody" id="s34" style="display:none">
+    <div style="font-size:20px;font-weight:800;margin-bottom:6px">Cost of Waiting Simulator</div>
+    <div style="font-size:13px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:16px">Two people both invest the same amount each month. <strong style="color:#F59E0B">One starts now.</strong> One waits. Use the sliders to see how many pounds your future self could lose by delaying — and how much more monthly saving can buy you.</div>
+    <div class="sim-slider-wrap">
+      <div class="sim-slider-top"><span class="sim-slider-label">I start saving at age:</span><span class="sim-slider-val" style="color:var(--amber)" id="cowagev">35</span></div>
+      <input type="range" id="cowage" class="amber" min="20" max="60" step="1" value="35" oninput="updateCow()">
+      <div class="sim-range-hint"><span>Age 20</span><span>Age 60</span></div>
+    </div>
+    <div class="sim-slider-wrap">
+      <div class="sim-slider-top"><span class="sim-slider-label">I save per month:</span><span class="sim-slider-val" style="color:var(--amber)" id="cowmov">£200</span></div>
+      <input type="range" id="cowmo" class="amber" min="50" max="1000" step="25" value="200" oninput="updateCow()">
+      <div class="sim-range-hint"><span>£50</span><span>£1,000</span></div>
+    </div>
+    <div style="font-size:11px;font-weight:500;color:var(--text-m);text-align:center;margin-bottom:14px">Assumes 7% average annual growth. Calculated to age 65.</div>
+    <div class="cow-cards">
+      <div class="cow-card"><div class="cow-card-lbl">Your Projection</div><div class="cow-card-age" id="cowMyAge">Start at 35</div><div class="cow-card-inv" id="cowMyInv">Invested: £72,000</div><div class="cow-card-num" style="color:var(--teal)" id="cowMyVal">£0</div></div>
+      <div class="cow-card"><div class="cow-card-lbl">If Started at 25</div><div class="cow-card-age">Start at 25</div><div class="cow-card-inv" id="cowRefInv">Invested: £96,000</div><div class="cow-card-num" style="color:#34D399" id="cowRefVal">£0</div></div>
+    </div>
+    <div class="cow-diff loss" id="cowDiff"><div class="cow-diff-lbl" id="cowDiffLbl">Starting at 35 instead of 25 costs you:</div><div class="cow-diff-num" style="color:#F87171" id="cowDiffNum">£0</div><div class="cow-diff-sub" id="cowDiffSub">10 years of lost growth</div></div>
+    <div class="sim-graph">
+      <div class="sim-graph-title">Growth to Age 65</div>
+      <canvas id="cowCanvas" height="140" style="width:100%;display:block;border-radius:6px"></canvas>
+      <div class="sim-legend">
+        <div class="sim-leg-item"><div class="sim-leg-dot" style="background:#34D399"></div>Starting at 25</div>
+        <div class="sim-leg-item"><div class="sim-leg-dot" style="background:var(--amber)"></div>Your start age</div>
+      </div>
+    </div>
+    <div class="sim-insight" id="cowInsight">Most common starting point — starting at 25 would have given you significantly more.</div>
+    <button class="btn" onclick="ns()">I've seen enough →</button>
+  </div>
+  <!-- L3 C5 Quiz -->
+  <div class="sbody" id="s35" style="display:none">
+    <div class="qz-lbl">CHECKPOINT</div>
+    <div class="qz-ct" id="qc5">Question 1 of 3</div>
+    <div class="qz-q" id="qq5"></div>
+    <div class="qz-opts" id="qo5"></div>
+    <div class="qz-exp" id="qe5"></div>
+    <button class="btn" id="qn5" style="display:none" onclick="qNext(5)">Next →</button>
+  </div>
+  <!-- L3 C5 Result -->
+  <div class="sbody" id="s36" style="display:none">
+    <div class="cc">
+      <div class="cc-iw"><div class="cc-gl" style="background:radial-gradient(circle,rgba(245,158,11,.25) 0%,transparent 70%)"></div><div class="cc-ic">⏳</div></div>
+      <div class="cc-ti">Challenge Complete</div>
+      <div class="cc-sub">The Earlier You Start</div>
+      <div class="cc-xp"><div class="cc-xn" style="color:var(--amber)">+150 XP</div><div class="cc-xl">Added to your total</div></div>
+      <div class="cc-ins">The best time to start was 10 years ago. The second best time is today.</div>
+      <button class="btn" onclick="startL3C6()">Continue to Challenge 6 →</button>
+    </div>
+  </div>
+
+  <!-- L3 C6 Intro -->
+  <div class="sbody" id="s37" style="display:none">
+    <div style="text-align:center;padding-top:8px">
+      <div style="font-size:56px;margin-bottom:14px">🧾</div>
+      <div class="ctag tg-sa" style="display:inline-block;margin-bottom:12px">SAVING</div>
+      <div style="font-size:24px;font-weight:800;letter-spacing:-.4px;margin-bottom:10px">Needs, Wants and Future You</div>
+      <div style="font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:24px">Most people are surprised by how their spending actually breaks down once they look honestly at the numbers.</div>
+      <div class="intro-chips"><div class="chip">🎬 1 video</div><div class="chip">📖 2 insights</div><div class="chip">🎯 Spending sorter</div><div class="chip">⚡ +100 XP</div></div>
+      <button class="btn" onclick="ns()">Let's go →</button>
+    </div>
+  </div>
+  <!-- L3 C6 Video -->
+  <div class="sbody" id="s38" style="display:none">
+    <div class="vlbl">Watch first · 2 min</div>
+    <div class="vph" onclick="window.open('https://youtu.be/xPJKuNOoAkE','_blank')"><div class="vph-play">▶</div><div class="vph-name">Budgeting — 50/30/20</div><div class="vph-hint">Tap to watch on YouTube</div></div>
+    <div class="vtitle">Budgeting — 50/30/20</div>
+    <div class="vdesc">A practical framework for allocating your income across needs, wants, and savings that anyone can apply.</div>
+    <button class="btn" onclick="ns()">Continue →</button>
+  </div>
+  <!-- L3 C6 Slide 1 -->
+  <div class="sbody" id="s39" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 1 OF 2</div>
+    <div class="slide-card">
+      <div class="sv amber"><div class="svc" style="display:flex;width:100%;height:100%;align-items:stretch">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(0,212,170,.08)"><div style="font-size:26px;font-weight:800;color:var(--teal)">50%</div><div style="font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.06em">Needs</div></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(124,58,237,.08)"><div style="font-size:26px;font-weight:800;color:#A78BFA">30%</div><div style="font-size:10px;font-weight:700;color:#A78BFA;text-transform:uppercase;letter-spacing:.06em">Wants</div></div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(245,158,11,.08)"><div style="font-size:26px;font-weight:800;color:var(--amber)">20%</div><div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.06em">Save</div></div>
+      </div></div>
+      <div class="sc3">
+        <div class="sh">The 50/30/20 Rule</div>
+        <div class="sb2">50% goes to essential needs. 30% goes to things you enjoy. 20% goes to savings and future goals. It is a starting point, not a law — but it gives you a framework to measure against.</div>
+        <div class="sco callout-amber">Most people who track their spending are surprised by how much goes to wants.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt active"></div><div class="sdt"></div></div>
+    <button class="btn" onclick="ns()">Next →</button>
+  </div>
+  <!-- L3 C6 Slide 2 -->
+  <div class="sbody" id="s40" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:16px">KEY INSIGHT · 2 OF 2</div>
+    <div class="slide-card">
+      <div class="sv amber"><div class="svc" style="flex-direction:column;gap:4px;padding:0 20px;text-align:center">
+        <div style="font-size:13px;font-weight:700;color:var(--amber)">What you THINK you spend</div>
+        <div style="font-size:20px">⬛</div><div style="height:2px;background:rgba(255,255,255,.15);width:80%;margin:0 auto"></div>
+        <div style="font-size:30px">⬛⬛⬛</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text-2)">What you ACTUALLY spend</div>
+      </div></div>
+      <div class="sc3">
+        <div class="sh">The spending you do not see</div>
+        <div class="sb2">Subscriptions, convenience purchases, small daily habits — these never feel significant in the moment but add up to hundreds of pounds a month. Awareness is the first step to control.</div>
+        <div class="sco callout-amber">You cannot manage what you do not measure.</div>
+      </div>
+    </div>
+    <div class="sdots"><div class="sdt"></div><div class="sdt active"></div></div>
+    <button class="btn" onclick="ns()">Start the Challenge →</button>
+  </div>
+  <!-- L3 C6 NWS Sorter -->
+  <div class="sbody" id="s41" style="display:none">
+    <div style="font-size:20px;font-weight:800;margin-bottom:6px">Need, Want, or Save?</div>
+    <div style="font-size:13px;font-weight:500;color:var(--text-2);margin-bottom:4px">Tap the right category for each item.</div>
+    <div style="font-size:11px;font-weight:700;color:var(--text-m);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px" id="nwsp">Item 1 of 8</div>
+    <div class="nws-item" id="nwscard"></div>
+    <div class="nws-fb" id="nwsfb"></div>
+    <div class="nws-btns">
+      <button class="nws-btn nws-need" onclick="nwsAns('need')" id="nwsbn">NEED</button>
+      <button class="nws-btn nws-want" onclick="nwsAns('want')" id="nwsbw">WANT</button>
+      <button class="nws-btn nws-save" onclick="nwsAns('save')" id="nwsbs">SAVE</button>
+    </div>
+    <div id="nwsnxt" style="display:none"><button class="btn" onclick="nwsNext()">Next →</button></div>
+    <div id="nwsresult" style="display:none">
+      <div style="font-size:18px;font-weight:800;margin-bottom:4px;text-align:center">Your Spending Split</div>
+      <div style="font-size:13px;font-weight:500;color:var(--text-2);text-align:center;margin-bottom:16px">Based on your categorisations</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+        <div style="background:var(--teal-dim);border-radius:10px;padding:12px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--teal)" id="nwsNeedPct">0%</div><div style="font-size:10px;font-weight:700;color:var(--teal);text-transform:uppercase">Needs</div></div>
+        <div style="background:rgba(124,58,237,.15);border-radius:10px;padding:12px;text-align:center"><div style="font-size:22px;font-weight:800;color:#A78BFA" id="nwsWantPct">0%</div><div style="font-size:10px;font-weight:700;color:#A78BFA;text-transform:uppercase">Wants</div></div>
+        <div style="background:rgba(245,158,11,.15);border-radius:10px;padding:12px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--amber)" id="nwsSavePct">0%</div><div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase">Save</div></div>
+      </div>
+      <div style="background:var(--card-el);border-radius:10px;padding:12px;font-size:12px;font-weight:600;color:var(--text-2);text-align:center;margin-bottom:12px">50/30/20 ideal: 50% Needs · 30% Wants · 20% Save</div>
+      <div style="font-size:13px;font-weight:500;color:var(--text-2);line-height:1.6;text-align:center;margin-bottom:18px" id="nwsInsight"></div>
+      <button class="btn" onclick="ns()">Continue to Quiz →</button>
+    </div>
+  </div>
+  <!-- L3 C6 Quiz -->
+  <div class="sbody" id="s42" style="display:none">
+    <div class="qz-lbl">CHECKPOINT</div>
+    <div class="qz-ct" id="qc6">Question 1 of 3</div>
+    <div class="qz-q" id="qq6"></div>
+    <div class="qz-opts" id="qo6"></div>
+    <div class="qz-exp" id="qe6"></div>
+    <button class="btn" id="qn6" style="display:none" onclick="qNext(6)">Next →</button>
+  </div>
+  <!-- L3 C6 Result -->
+  <div class="sbody" id="s43" style="display:none">
+    <div class="cc">
+      <div class="cc-iw"><div class="cc-gl" style="background:radial-gradient(circle,rgba(245,158,11,.25) 0%,transparent 70%)"></div><div class="cc-ic">🧾</div></div>
+      <div class="cc-ti">Challenge Complete</div><div class="cc-sub">Needs, Wants and Future You</div>
+      <div class="cc-xp"><div class="cc-xn" style="color:var(--amber)">+100 XP</div><div class="cc-xl">Added to your total</div></div>
+      <div class="cc-ins">Knowing where your money goes is the first act of taking control of it.</div>
+      <button class="btn" onclick="showL3C()">Complete Level 3 →</button>
+    </div>
+  </div>
+  <!-- Level 3 Complete / Demo Complete -->
+  <div class="sbody" id="s44" style="display:none">
+    <div id="lcfl3" style="display:none" class="lc-flash"></div>
+    <div class="lc" id="l3lcontent">
+      <div class="lc-bw"><div class="lc-bg" style="background:radial-gradient(circle,rgba(245,158,11,.25) 0%,transparent 70%)"></div><div class="lc-b">🏅</div></div>
+      <div class="lc-ti">The Cost of Waiting Complete!</div>
+      <div class="lc-cat" style="background:rgba(245,158,11,.2);color:var(--amber)">SAVING</div>
+      <div class="lc-xp" style="border-color:rgba(245,158,11,.25)"><div class="lc-xn" style="color:var(--amber)">300 XP</div><div class="lc-xl">Total earned this level</div><div class="lc-bn">🥇 Future Thinker — Unlocked</div></div>
+      <div style="font-size:14px;font-weight:700;color:var(--text-2);margin-bottom:20px">You have completed all 3 demo levels</div>
+      <button class="btn" onclick="showDemoComplete()">See your full results →</button>
+    </div>
+  </div>
+  <!-- Demo Complete -->
+  <div class="sbody" id="s45" style="display:none">
+    <div class="dc-wrap">
+      <div class="dc-logo"><span class="l">Life</span><span class="s">Smart</span></div>
+      <div class="dc-title">You have completed the demo</div>
+      <div class="dc-stat-card">
+        <div class="dc-xp" id="dcXp">850 XP</div>
+        <div class="dc-ch">6 Challenges Completed</div>
+        <div class="dc-badges">🏅🏅🏅</div>
+      </div>
+      <div class="dc-map-strip">
+        <div class="dc-node t">🛡️</div><div style="width:8px;height:2px;background:var(--teal);opacity:.4"></div>
+        <div class="dc-node p">💳</div><div style="width:8px;height:2px;background:var(--purple);opacity:.4"></div>
+        <div class="dc-node a">⏳</div><div style="width:8px;height:2px;background:rgba(255,255,255,.1)"></div>
+        <div class="dc-node lk">4</div><div class="dc-node lk">5</div><div class="dc-node lk">6</div>
+        <div class="dc-node lk">7</div><div class="dc-node lk">8</div><div class="dc-node lk">9</div>
+        <div class="dc-node lk">10</div><div class="dc-node lk">11</div><div class="dc-node lk">12</div>
+      </div>
+      <div class="dc-strip-lbl">9 more levels in the full curriculum</div>
+      <div class="dc-body">You have seen a preview of what LifeSmart can embed inside your app. The full curriculum covers investing, tax, property, pensions, financial psychology, and more.</div>
+      <button class="btn" onclick="restartDemo()">Start Again</button>
+      <button class="btn-ghost" onclick="goHome()">Back to Journey Map</button>
+    </div>
+  </div>
+
+
+  <!-- ════ NEWS MODULE — TARIFFS ════ -->
+  <!-- s46 News Intro -->
+  <div class="sbody" id="s46" style="display:none">
+    <div style="text-align:center;padding-top:8px">
+      <div style="font-size:56px;margin-bottom:10px">📰</div>
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:20px;padding:4px 12px;margin-bottom:12px"><div style="width:7px;height:7px;border-radius:50%;background:#EF4444;animation:newsPulse 1.5s infinite"></div><span style="font-size:11px;font-weight:800;color:#F87171;letter-spacing:.08em">LIVE NOW</span></div>
+      <div style="font-size:22px;font-weight:800;line-height:1.3;margin-bottom:10px;letter-spacing:-.3px">Trade War:<br>What It Means For You</div>
+      <div style="font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:20px;max-width:300px;margin-left:auto;margin-right:auto">Tariffs are dominating the headlines. But most people don't actually know what they are — or how they affect their wallet.</div>
+      <div class="intro-chips"><div class="chip">📖 3 insights</div><div class="chip">🎯 Impact sorter</div><div class="chip">✅ Quick quiz</div><div class="chip">⚡ +75 XP</div></div>
+      <button class="btn" onclick="ns()">Start →</button>
+    </div>
+  </div>
+
+  <!-- s47 News Slide 1 -->
+  <div class="sbody" id="s47" style="display:none">
+    <div class="news-banner"><div class="news-tag">📍 Reuters · Today</div><div class="news-hl">US imposes 25% tariffs on imported goods from key trading partners</div><div class="news-src">reuters.com</div></div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:12px">WHAT IS A TARIFF?</div>
+    <div class="slide-card">
+      <div class="sv" style="background:linear-gradient(135deg,#1A0505,#2D0808)"><div class="svc"><div class="sbs" style="color:#F87171">25%</div><div class="svs" style="color:rgba(248,113,113,.5)">added to the price of imports</div></div></div>
+      <div class="sc3">
+        <div class="sh">A tariff is a tax on imported goods</div>
+        <div class="sb2">When a country imposes a tariff, it charges an extra fee on goods coming in from abroad. A 25% tariff on a £40,000 car from Japan means the importer pays £50,000 before it even reaches a showroom.</div>
+        <div class="sco" style="border-left-color:#EF4444;background:rgba(239,68,68,.08);color:#F87171">The cost almost always gets passed to the consumer.</div>
+      </div>
+    </div>
+    <button class="btn" onclick="ns()">Next →</button>
+  </div>
+
+  <!-- s48 News Slide 2 -->
+  <div class="sbody" id="s48" style="display:none">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-m);margin-bottom:12px">WHY DO COUNTRIES USE THEM?</div>
+    <div class="slide-card">
+      <div class="sv" style="background:linear-gradient(135deg,#050A1A,#080D2D)">
+        <div class="svc" style="display:grid;grid-template-columns:1fr 1fr;gap:1px;width:100%;height:100%">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(0,212,170,.06)"><div style="font-size:24px">🏭</div><div style="font-size:10px;font-weight:700;color:var(--teal);text-align:center;padding:0 4px">Protect domestic industry</div></div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(124,58,237,.06)"><div style="font-size:24px">💰</div><div style="font-size:10px;font-weight:700;color:#A78BFA;text-align:center;padding:0 4px">Raise government revenue</div></div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(245,158,11,.06)"><div style="font-size:24px">🤝</div><div style="font-size:10px;font-weight:700;color:var(--amber);text-align:center;padding:0 4px">Bargaining chip in trade deals</div></div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(239,68,68,.06)"><div style="font-size:24px">⚠️</div><div style="font-size:10px;font-weight:700;color:#F87171;text-align:center;padding:0 4px">Retaliation against rivals</div></div>
+        </div>
+      </div>
+      <div class="sc3">
+        <div class="sh">Four reasons governments reach for tariffs</div>
+        <div class="sb2">Tariffs are political tools as much as economic ones. Protecting steel workers in Ohio and pressuring China into a trade deal are both reasons the same president might use them in the same week.</div>
+        <div class="sco" style="border-left-color:#EF4444;background:rgba(239,68,68,.08);color:#F87171">Trade wars rarely have clean winners.</div>
+      </div>
+    </div>
+    <button class="btn" onclick="ns()">Next →</button>
+  </div>
+
+  <!-- s49 Tariff Impact Sorter -->
+  <div class="sbody" id="s49" style="display:none">
+    <div style="font-size:20px;font-weight:800;margin-bottom:4px">Who wins, who loses?</div>
+    <div style="font-size:13px;font-weight:500;color:var(--text-2);margin-bottom:14px">Tap each group — do new import tariffs help them, hurt them, or is it complicated?</div>
+    <div class="tariff-sort" id="tsort"></div>
+    <div id="tsortdone" style="display:none">
+      <div style="background:var(--card);border-radius:12px;padding:14px;text-align:center;margin-bottom:14px">
+        <div style="font-size:32px;font-weight:800;color:var(--teal)" id="tscore">0/5</div>
+        <div style="font-size:13px;color:var(--text-2);margin-top:4px">Correct answers</div>
+      </div>
+      <button class="btn" onclick="ns()">Continue to Quiz →</button>
+    </div>
+  </div>
+
+  <!-- s50 News Quiz -->
+  <div class="sbody" id="s50" style="display:none">
+    <div class="qz-lbl">CHECKPOINT</div>
+    <div class="qz-ct" id="qc7">Question 1 of 3</div>
+    <div class="qz-q" id="qq7"></div>
+    <div class="qz-opts" id="qo7"></div>
+    <div class="qz-exp" id="qe7"></div>
+    <button class="btn" id="qn7" style="display:none" onclick="qNext(7)">Next →</button>
+  </div>
+
+  <!-- s51 News Complete -->
+  <div class="sbody" id="s51" style="display:none">
+    <div class="cc">
+      <div class="cc-iw"><div class="cc-gl" style="background:radial-gradient(circle,rgba(239,68,68,.3) 0%,transparent 70%)"></div><div class="cc-ic">📰</div></div>
+      <div class="cc-ti">Challenge Complete</div>
+      <div class="cc-sub">Trade War: What It Means For You</div>
+      <div class="cc-xp"><div class="cc-xn" style="color:#F87171">+75 XP</div><div class="cc-xl">Added to your total</div></div>
+      <div class="cc-ins">Tariffs are the financial story of the moment. Every imported product you buy, every job that depends on exports — this affects it all. Now you know why.</div>
+      <button class="btn" onclick="finishNews()">Back to Journey Map →</button>
+    </div>
+  </div>
+
+</div><!-- end challenge screen -->
+
+<script>
+const LVS=[
+  {id:1,icon:'🛡️',name:'Scam Shield',tag:'SECURITY',tc:'tg-se',teaser:'Spot scams before they spot you',status:'active'},
+  {id:2,icon:'💳',name:'Debt Decoded',tag:'CREDIT',tc:'tg-cr',teaser:'Master the real cost of borrowing',status:'active'},
+  {id:3,icon:'⏳',name:'The Cost of Waiting',tag:'SAVING',tc:'tg-sa',teaser:'Why starting now beats starting big',status:'active'},
+  {id:4,icon:'📈',name:'Market Moves',tag:'INVESTING',tc:'tg-iv',teaser:'How to make your money grow',status:'locked'},
+  {id:5,icon:'🧾',name:'Tax Decoded',tag:'TAX',tc:'tg-tx',teaser:'What you are actually taking home',status:'locked'},
+  {id:6,icon:'🏠',name:'Borrow Bigger',tag:'PROPERTY',tc:'tg-pr',teaser:'Mortgages and what lenders really look at',status:'locked'},
+  {id:7,icon:'🧠',name:'Money and Mind',tag:'PSYCHOLOGY',tc:'tg-ps',teaser:'Why smart people make bad financial decisions',status:'locked'},
+  {id:8,icon:'📰',name:'In the News',tag:'CURRENT AFFAIRS',tc:'tg-nw',teaser:'Financial lessons from what is happening right now',status:'locked',live:true},
+  {id:9,icon:'🎯',name:'Smart Goals',tag:'PLANNING',tc:'tg-pl',teaser:'How to turn intentions into real outcomes',status:'locked'},
+  {id:10,icon:'🛡️',name:'Build Your Safety Net',tag:'RESILIENCE',tc:'tg-re',teaser:'Emergency funds that actually work',status:'locked'},
+  {id:11,icon:'💰',name:'Pension Power',tag:'RETIREMENT',tc:'tg-rt',teaser:'Why waiting costs more than you think',status:'locked'},
+  {id:12,icon:'🌍',name:'Money Across Borders',tag:'GLOBAL',tc:'tg-gl',teaser:'Currency, exchange rates, and global decisions',status:'locked'},
+];
+
+const ST={
+  streak:parseInt(localStorage.getItem('ls_s')||'0'),
+  xp:parseInt(localStorage.getItem('ls_x')||'0'),
+  levels:parseInt(localStorage.getItem('ls_lv')||'0'),
+  best:parseInt(localStorage.getItem('ls_b')||'0'),
+  l1:localStorage.getItem('ls_l1')==='1'
+};
+function save(){localStorage.setItem('ls_s',ST.streak);localStorage.setItem('ls_x',ST.xp);localStorage.setItem('ls_lv',ST.levels);localStorage.setItem('ls_b',ST.best);if(ST.l1)localStorage.setItem('ls_l1','1')}
+if(ST.l1){LVS[0].status='completed';LVS[1].status='active'}
+
+const wo=document.getElementById('wo');
+wo.classList.add('done');
+setTimeout(()=>wo.style.display='none',2800);
+
+const XP_MAX=850;
+function rStats(){updateXPBar();
+
+  document.getElementById('sc').textContent=ST.streak;
+  document.getElementById('xc').textContent=ST.xp;
+  document.getElementById('ss').textContent=ST.streak;
+  document.getElementById('sx').textContent=ST.xp;
+  document.getElementById('sl').textContent=ST.levels+'/3';
+  const sb=document.getElementById('sb');if(sb)sb.textContent=ST.best||'0';
+  if(ST.levels>0)document.getElementById('gsub').textContent=ST.levels+' of 3 levels complete · Keep going';
+}
+rStats();
+
+function buildMap(){
+  const mc=document.getElementById('mc'),mn=document.getElementById('mn'),msv=document.getElementById('msv');
+  const RH=120,W=mc.offsetWidth||390,LX=46,RX=W-46,NR=26,TH=LVS.length*RH+40;
+  mc.style.height=TH+'px';
+  msv.setAttribute('viewBox',`0 0 ${W} ${TH}`);
+  msv.style.height=TH+'px';
+  const cen=LVS.map((l,i)=>({cx:i%2===0?LX:RX,cy:40+i*RH+NR,side:i%2===0?'left':'right'}));
+  msv.innerHTML='';let pa='',pl='';
+  for(let i=0;i<LVS.length-1;i++){
+    const a=cen[i],b=cen[i+1],m=(a.cy+b.cy)/2;
+    const seg=`M ${a.cx},${a.cy} C ${a.cx},${m} ${b.cx},${m} ${b.cx},${b.cy} `;
+    if(i<2)pa+=seg;else pl+=seg;
+  }
+  function mkPath(d,clr,w,da){const e=document.createElementNS('http://www.w3.org/2000/svg','path');e.setAttribute('d',d);e.setAttribute('fill','none');e.setAttribute('stroke',clr);e.setAttribute('stroke-width',w);e.setAttribute('stroke-dasharray',da);if(clr==='#00D4AA')e.setAttribute('opacity','.45');msv.appendChild(e)}
+  if(pa)mkPath(pa,'#00D4AA','2.5','6 4');
+  if(pl)mkPath(pl,'#1E2035','2','4 5');
+  mn.innerHTML='';
+  LVS.forEach((lv,i)=>{
+    const{cx,cy,side}=cen[i],isl=side==='left';
+    const row=document.createElement('div');
+    row.style.cssText=`position:absolute;left:0;right:0;top:${cy-NR-6}px;display:flex;align-items:flex-start;padding:0 16px;justify-content:${isl?'flex-start':'flex-end'}`;
+    const ct=document.createElement('div');
+    ct.style.cssText=`display:flex;align-items:flex-start;gap:11px;max-width:265px;padding-top:5px;flex-direction:${isl?'row':'row-reverse'}`;
+    const nc=document.createElement('div');nc.classList.add('nc',lv.status);nc.dataset.id=lv.id;
+    if(lv.status==='active'){const nl=document.createElement('div');nl.className='nl';nl.textContent=lv.id===1?'START':'NEXT';nc.appendChild(nl)}
+    const ni=document.createElement('span');ni.className='ni';ni.textContent=lv.status==='locked'?'🔒':lv.icon;nc.appendChild(ni);
+    if(lv.live){const b=document.createElement('div');b.className='live-b';b.textContent='LIVE';nc.appendChild(b)}
+    nc.addEventListener('click',()=>nodeTap(lv,nc));
+    const nt=document.createElement('div');nt.className='nt';nt.style.textAlign=isl?'left':'right';
+    nt.innerHTML=`<div class="nn">${lv.name}</div><div class="ntg ${lv.tc}">${lv.tag}</div><div class="nts">${lv.teaser}</div>`;
+    ct.appendChild(nc);ct.appendChild(nt);row.appendChild(ct);mn.appendChild(row);
+  });
+}
+buildMap();
+window.addEventListener('resize',buildMap);
+
+function nodeTap(lv,el){
+  if(lv.status==='active'||lv.status==='completed'){openLevel(lv.id);return}
+  if(lv.live){showTip(el,`📰 "${lv.name}" — bonus challenge`);return}
+  showTip(el,`🔒 Complete ${LVS[lv.id-2]?.name||'previous level'} to unlock`);
+}
+let ttt=null;
+function showTip(el,msg){
+  const t=document.getElementById('tip');const r=el.getBoundingClientRect();
+  t.textContent=msg;t.style.top=(r.top-52+window.scrollY)+'px';t.style.left=Math.max(8,Math.min(window.innerWidth-210,r.left-70))+'px';
+  t.classList.add('show');clearTimeout(ttt);ttt=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ── CHALLENGE FLOW ───────────────────────────────────────────────────────────
+const STEPS=15; // s0..s14
+let si=0;
+
+function applyLvTheme(){
+  const cs=document.getElementById('cs');const t=cs?.dataset?.theme||'teal';
+  const map={teal:['rgba(0,212,170,.25)','#00D4AA','#07070F'],purple:['rgba(124,58,237,.3)','#7C3AED','#fff'],amber:['rgba(245,158,11,.3)','#F59E0B','#07070F']};
+  const[shadow,bg,fg]=map[t]||map.teal;
+  document.querySelectorAll('#cs .btn:not(.ghost)').forEach(b=>{b.style.background=bg;b.style.color=fg;b.style.boxShadow='0 0 24px '+shadow;});
+  const nav=document.getElementById('pdots');const dots=document.querySelectorAll('#cs .pd.active');
+  dots.forEach(d=>d.style.background=bg);
+}
+function openLevel(id){
+  if(id===1){const cs=document.getElementById('cs');cs.dataset.theme='teal';applyLvTheme();const resume=si>0&&si<=14;if(!resume)si=0;cs.classList.add('open');document.body.style.overflow='hidden';if(!resume){initSW();initCk();initQ(1);initQ(2);}showS(si);updDots();return}
+  if(id===2){si=15;const cs=document.getElementById('cs');cs.classList.add('open');cs.dataset.theme='purple';applyLvTheme();document.body.style.overflow='hidden';showS(15);updDots2();initQ(3);initQ(4);initMVF();setTimeout(()=>updateDebt(120),100);return}
+  if(id===3){si=30;const cs=document.getElementById('cs');cs.classList.add('open');cs.dataset.theme='amber';applyLvTheme();document.body.style.overflow='hidden';showS(30);updDots2();initQ(5);initQ(6);initNWS();setTimeout(()=>{updateCow();},100);return}
+}
+function showS(i){
+  for(let j=0;j<=51;j++){const e=document.getElementById('s'+j);if(e)e.style.display='none'}
+  const e=document.getElementById('s'+i);if(e)e.style.display='flex';
+  // Scroll challenge screen back to top on every step
+  const scr=document.getElementById('cs');if(scr)scr.scrollTop=0;
+  // Re-render quiz screens fresh
+  const quizMap={5:1,12:2,20:3,27:4,35:5,42:6};
+  if(quizMap[i]&&QD[quizMap[i]]){const n=quizMap[i];QS[n]={q:0,ans:false};rQ(n);}
+  // Re-init checklist when its screen shows
+  if(i===11)initCk();
+}
+function ns(){si++;showS(si);updDots();
+  if(si===19)setTimeout(()=>updateDebt(document.getElementById('dslider')?.value||120),80);
+  if(si===34)setTimeout(updateCow,80);
+}
+function cBack(){if(si>0){si--;showS(si);updDots();}else goHome();}
+function holdHome(){
+  // Save current position so map shows progress; return to home without resetting si
+  document.getElementById('cs').classList.remove('open');
+  document.body.style.overflow='';
+  buildMap();rStats();
+  // Show a brief toast confirming progress is saved
+  const t=document.getElementById('tip');if(t){t.textContent='✓ Progress saved — tap your level to continue';t.style.top='80px';t.style.left='50%';t.style.transform='translateX(-50%)';t.style.maxWidth='260px';t.classList.add('show');setTimeout(()=>{t.classList.remove('show');t.style.transform='';},2500);}
+}
+function goHome(){document.getElementById('cs').classList.remove('open');document.body.style.overflow='';buildMap();rStats()}
+function startC2(){si=7;showS(7);updDots()}
+
+function updDots(){
+  const pd=document.getElementById('pdots');
+  const inC1=si<7,total=inC1?7:8,idx=inC1?si:si-7;
+  pd.innerHTML='';
+  for(let i=0;i<total;i++){const d=document.createElement('div');d.className='pd '+(i===idx?'active':i<idx?'done':'inactive');pd.appendChild(d)}
+}
+
+// ── SCAM DATA ────────────────────────────────────────────────────────────────
+const SWD=[
+  {from:'HSBC Bank',msg:'We have detected unusual activity on your account. Please verify your identity immediately by clicking the link below or your account will be suspended within 24 hours.',scam:true,exp:'This uses all three weapons: urgency (24 hours), authority (HSBC), and fear (suspended account). Real banks never suspend accounts via unsolicited text messages.'},
+  {from:'Amazon',msg:'Your order #GBX-4821 has shipped and will arrive Thursday. Track your delivery at amazon.co.uk/track',scam:false,exp:'This is a legitimate delivery notification. It contains a real order number, directs to the official amazon.co.uk domain, and creates no urgency or fear.'},
+  {from:'TV Licensing',msg:'Your TV Licence is about to expire. To avoid a £1,000 penalty, renew now at tv-licence-renew.co.uk/payment',scam:true,exp:'Two red flags: the extreme fine creates panic, and the domain "tv-licence-renew.co.uk" is not the official tvlicensing.co.uk. Always verify the exact domain.'},
+  {from:'HMRC',msg:'You are entitled to a tax refund of £312.50. To claim, provide your bank details at hmrc-refund.com',scam:true,exp:'HMRC will never ask for bank details via text or email. Real refunds go through your existing HMRC account. The domain "hmrc-refund.com" is not a government website.'},
+  {from:'Natwest Bank',msg:'Your new card ending in 4821 is on its way and will arrive within 5 working days. No action is needed from you.',scam:false,exp:'This is a standard card dispatch notification. It references a specific card, requires no action, asks for nothing, and creates no urgency or fear.'},
+  {from:'Unknown Number',msg:"Hi Mum it's me, I've changed my number. I need you to buy me £200 in gift cards urgently, explain later. Don't call the old number.",scam:true,exp:'The "Hi Mum" scam. It isolates you from verification, creates urgency, and makes an unusual financial request. Always verify by calling a known family number.'},
+];
+let swi=0,swAns_done=false,swScore=0;
+
+function initSW(){swi=0;swAns_done=false;swScore=0;showCard();}
+function showCard(){
+  const area=document.getElementById('swa');
+  const card=SWD[swi];
+  const hr=8+swi,mn=String(Math.floor(Math.random()*50)+10).padStart(2,'0');
+  const initial=card.from.charAt(0).toUpperCase();
+  area.innerHTML=`<div class="swc" id="swc0"><div class="sms-hd"><div class="sms-av">${initial}</div><div class="sms-meta"><div class="sms-from">${card.from}</div><div class="sms-sub">Text Message</div></div><div class="sms-ts">${hr}:${mn}</div></div><div class="sms-body"><div class="sms-bubble">${card.msg}</div></div></div>`;
+  document.getElementById('swp').textContent=`Card ${swi+1} of ${SWD.length}`;
+  const fb=document.getElementById('swfb');fb.className='sw-fb';fb.style.display='none';
+  document.getElementById('swbtns').style.display='grid';
+  document.getElementById('swnxt').style.display='none';document.getElementById('swfin').style.display='none';
+  swAns_done=false;
+}
+function swAns(ans){
+  if(swAns_done)return;swAns_done=true;
+  const card=SWD[swi];const ok=(ans==='scam')===card.scam;if(ok)swScore++;
+  const ce=document.getElementById('swc0');if(ce)ce.classList.add(ok?'fg':'fr');
+  const fb=document.getElementById('swfb');
+  fb.className='sw-fb '+(ok?'ok':'bad');
+  fb.style.display=''; // clear inline style so CSS .ok/.bad rule takes over
+  const verdict=card.scam?'SCAM':'LEGIT';
+  const icon=ok?(card.scam?'🚨':'✅'):(card.scam?'😬':'🤔');
+  const result=ok?'Correct':'Not quite';
+  fb.innerHTML=`<div class="sw-fb-bar"><span class="sw-fb-icon">${icon}</span><span class="sw-fb-label">${verdict}</span><span class="sw-fb-result">${result}</span></div><div class="sw-fb-exp">${card.exp}</div>`;
+  document.getElementById('swbtns').style.display='none';
+  const last=swi===SWD.length-1;
+  if(last)document.getElementById('swfin').style.display='block';
+  else document.getElementById('swnxt').style.display='block';
+}
+function swNext(){swi++;showCard();}
+
+// ── CHECKLIST ────────────────────────────────────────────────────────────────
+const CKD=[
+  {t:'I use a different password for my banking app compared to other websites',k:'pw',why:'Using the same password everywhere means one breach exposes everything. A password manager makes unique passwords effortless.'},
+  {t:'I have two-step verification enabled on my banking app',k:'2fa',why:'Two-step verification blocks 99% of automated account takeover attacks even if your password is stolen.'},
+  {t:'I check my bank statements at least once a month for unexpected charges',k:'stmt',why:'Many fraudulent charges are small and go unnoticed for months. Monthly checks catch them before they become serious.'},
+  {t:'I know what my bank would and would not ask me to share over the phone',k:'know',why:'Your bank will never ask for your PIN, full password, or one-time passcode. Knowing this makes you impossible to trick.'},
+  {t:'I am cautious about clicking links in text messages even from known senders',k:'links',why:'Phone numbers can be spoofed. A message appearing to come from your bank may not be. Always go directly to the official website instead.'},
+];
+let ckA={};
+function initCk(){ckA={};const c=document.getElementById('cki');c.innerHTML='';
+  CKD.forEach(i=>{const e=document.createElement('div');e.className='ck-item';e.id='ci'+i.k;
+    e.innerHTML=`<div class="ck-row"><div class="ck-txt">${i.t}</div><div class="ck-tg"><button class="tb yes" onclick="ckT('${i.k}','yes')">Yes</button><button class="tb no" onclick="ckT('${i.k}','no')">No</button></div></div><div class="ck-expand" id="cx${i.k}"><div class="ck-expand-inner"><span style="font-size:14px">⚠️</span><div class="ck-expand-txt">${i.why}</div></div></div>`;
+    c.appendChild(e);});
+  document.getElementById('cks').style.display='none';
+  document.getElementById('cksb').style.display='block';document.getElementById('cksb').disabled=true;
+  document.getElementById('ckcb').style.display='none';
+}
+function ckT(k,v){
+  ckA[k]=v;const r=document.getElementById('ci'+k);
+  r.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));r.querySelector('.'+v).classList.add('on');
+  r.classList.toggle('chk',v==='yes');
+  const exp=document.getElementById('cx'+k);
+  if(exp)exp.classList.toggle('open',v==='no');
+  document.getElementById('cksb').disabled=!CKD.every(i=>ckA[i.k]);
+}
+function submitCk(){
+  const sc=Object.values(ckA).filter(v=>v==='yes').length;
+  document.getElementById('cks').style.display='block';
+  document.getElementById('ckn').textContent=sc+'/5';
+  const msgs=['Your account security needs attention. Even one step from this list makes you significantly harder to target.','A few gaps to close. Each habit you add reduces your risk considerably.','Good foundation. The remaining habits will give you strong protection.','Almost there. One more habit and you will have strong account security.','Excellent. You have all the key habits in place. Your accounts are well protected.'];
+  document.getElementById('ckm').textContent=msgs[sc]||msgs[4];
+  document.getElementById('cksb').style.display='none';document.getElementById('ckcb').style.display='block';
+}
+
+// ── QUIZ ─────────────────────────────────────────────────────────────────────
+const QD={
+  1:[
+    {q:'A text says your bank account will be frozen unless you call back immediately. What should you do?',opts:['Call the number in the text right away','Ignore it completely','Call the number on the back of your bank card','Reply asking for more details'],c:2,exp:'Always use the number on the back of your card. Fraudsters can set up fake call centres matching the number shown in the message.'},
+    {q:'Which of these is NOT one of the three weapons scammers use?',opts:['Urgency','Authority','Generosity','Fear'],c:2,exp:'The three weapons are urgency, authority, and fear. Generosity is occasionally used as bait but is not one of the core psychological levers.'},
+    {q:'Someone claiming to be from HMRC says you owe a fine and must pay within the hour to avoid arrest. This is most likely:',opts:['Genuine — HMRC does send urgent notices','A scam — HMRC never threatens arrest via phone','Genuine but you should verify first','A scam — but only if you did not expect it'],c:1,exp:'HMRC will never threaten arrest over the phone, demand immediate payment, or ask you to pay within an hour. This is a well-known impersonation scam.'},
+  ],
+  2:[
+    {q:'Your bank calls and asks you to read out the one-time passcode that just arrived by text. What should you do?',opts:['Read it out — they need it to verify you','Hang up and call your bank on the number from their website','Ask them security questions first then share it','Tell them to send the code again'],c:1,exp:'Your bank will never ask for a one-time passcode over the phone. These codes are designed so only you use them. Sharing one gives a fraudster full access.'},
+    {q:'Which is a genuine warning sign of a phishing website?',opts:['It uses the same logo as your bank','The website address is slightly different from your bank\'s real address','It asks for your account number','It has a login page'],c:1,exp:'Fraudsters register domains that look almost identical to real ones — for example "hsbc-secure.co.uk" instead of "hsbc.co.uk". Always check the exact URL before entering any details.'},
+    {q:'You receive an email from your bank with a link to update your details. What is the safest approach?',opts:['Click the link — it looks official','Open your banking app directly without clicking the link','Forward it to a friend to check','Reply to the email asking if it is genuine'],c:1,exp:'Never click links in emails to access your bank. Open your banking app directly or type the address yourself. Even genuine-looking emails can lead to fake websites.'},
+  ]
+};
+let QS={1:{q:0,ans:false},2:{q:0,ans:false}};
+function rQ(n){
+  const s=QS[n],d=QD[n][s.q];
+  document.getElementById('qc'+n).textContent=`Question ${s.q+1} of ${QD[n].length}`;
+  document.getElementById('qq'+n).textContent=d.q;
+  const o=document.getElementById('qo'+n);o.innerHTML='';
+  d.opts.forEach((opt,i)=>{const b=document.createElement('button');b.className='qz-opt';b.textContent=opt;b.onclick=()=>qAns(n,i);o.appendChild(b)});
+  const e=document.getElementById('qe'+n);e.className='qz-exp';e.style.display='none';
+  document.getElementById('qn'+n).style.display='none';s.ans=false;
+}
+function qAns(n,idx){
+  const s=QS[n];if(s.ans)return;s.ans=true;
+  const d=QD[n][s.q];
+  document.getElementById('qo'+n).querySelectorAll('.qz-opt').forEach((b,i)=>{b.disabled=true;if(i===d.c)b.classList.add('ok');else if(i===idx&&idx!==d.c)b.classList.add('bad')});
+  const e=document.getElementById('qe'+n);e.textContent=d.exp;e.className='qz-exp show';e.style.display='block';
+  const nb=document.getElementById('qn'+n);nb.style.display='block';nb.textContent=s.q>=QD[n].length-1?'Continue →':'Next question →';
+}
+function qNext(n){const s=QS[n];s.q++;if(s.q<QD[n].length)rQ(n);else ns()}
+
+// ── LEVEL COMPLETE ────────────────────────────────────────────────────────────
+function showLC(){
+  ST.xp+=250;ST.streak+=2;ST.levels+=1;ST.l1=true;
+  LVS[0].status='completed';LVS[1].status='active';
+  save();
+  const fl=document.getElementById('lcfl');fl.style.display='block';setTimeout(()=>fl.style.display='none',400);
+  confetti();
+  si=14;showS(14);updDots();rStats();
+}
+function confetti(){
+  const cols=['#00D4AA','#7C3AED','#F59E0B','#F97316','#ffffff','#EC4899'];
+  const cs=document.getElementById('cs')||document.body;
+  for(let i=0;i<80;i++){
+    const p=document.createElement('div');p.className='cp';
+    const size=5+Math.random()*9;
+    const startX=20+Math.random()*60; // spread across top 20-80%
+    const dur=2+Math.random()*2;
+    const delay=Math.random()*0.6;
+    p.style.cssText=`position:fixed;left:${startX}%;top:-5%;width:${size}px;height:${size}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'2px'};pointer-events:none;z-index:9999;animation:cf ${dur}s ease-in ${delay}s forwards`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),((dur+delay)*1000)+200);
+  }
+}
+// ── LEVEL 2/3 DOTS ───────────────────────────────────────────────────────────
+function updDots2(){
+  const pd=document.getElementById('pdots');pd.innerHTML='';
+  const ranges={15:[15,21],22:[22,28],30:[30,36],37:[37,43]};
+  let range=null;
+  for(const[start,end]of Object.entries(ranges)){if(si>=parseInt(start)&&si<=parseInt(end)){range=[parseInt(start),parseInt(end)];break}}
+  if(!range)return;
+  const total=range[1]-range[0]+1,idx=si-range[0];
+  for(let i=0;i<total;i++){const d=document.createElement('div');d.className='pd '+(i===idx?'active':i<idx?'done':'inactive');pd.appendChild(d)}
+}
+const origUpdDots=updDots;
+function updDots(){if(si>=15)updDots2();else origUpdDots();}
+
+// ── L2 NAV ───────────────────────────────────────────────────────────────────
+function startL2C4(){si=22;showS(22);updDots2();initQ(4);initMVF();}
+function showL2C(){
+  ST.xp+=300;ST.streak+=2;ST.levels+=1;ST.l2=true;
+  LVS[1].status='completed';LVS[2].status='active';save();
+  const fl=document.getElementById('lcfl2');fl.style.display='block';setTimeout(()=>fl.style.display='none',400);
+  confetti();si=29;showS(29);updDots2();rStats();
+}
+function startL3(){si=30;showS(30);updDots2();initQ(5);initQ(6);initNWS();setTimeout(updateCow,100);}
+
+// ── L3 NAV ───────────────────────────────────────────────────────────────────
+function startL3C6(){si=37;showS(37);updDots2();}
+function showL3C(){
+  ST.xp+=300;ST.streak+=2;ST.levels+=1;ST.l3=true;save();
+  LVS[2].status='completed';
+  const fl=document.getElementById('lcfl3');fl.style.display='block';setTimeout(()=>fl.style.display='none',400);
+  confetti();si=44;showS(44);updDots2();rStats();
+}
+function showDemoComplete(){
+  document.getElementById('dcXp').textContent=ST.xp+' XP';
+  si=45;showS(45);updDots2();
+}
+function restartDemo(){
+  ['ls_s','ls_x','ls_lv','ls_l1','ls_l2','ls_l3'].forEach(k=>localStorage.removeItem(k));
+  location.reload();
+}
+
+// ── QUIZ DATA L2/L3 ─────────────────────────────────────────────────────────
+Object.assign(QD,{
+  3:[
+    {q:'If you only ever pay the minimum on a credit card, what happens?',opts:['The debt clears at the same speed','Interest adds up faster than minimum payments reduce the balance','The bank charges no additional fees','Your credit score improves automatically'],c:1,exp:'Minimum payments are designed to keep you in debt longer. The interest added each month can exceed what you pay off.'},
+    {q:'What does APR stand for?',opts:['Annual Payment Rate','Additional Percentage Rate','Annual Percentage Rate','Average Payment Ratio'],c:2,exp:'APR — Annual Percentage Rate — is the total yearly cost of borrowing, including interest and standard fees, expressed as a percentage.'},
+    {q:'On a £4,000 balance at 29.9% APR, paying £300 instead of £120 per month:',opts:['Makes almost no difference','Saves over £1,500 in interest','Increases the total debt','Only helps if done every month for a year'],c:1,exp:'Higher payments dramatically reduce total interest paid. Even small payment increases save significant amounts because of how compound interest works.'},
+  ],
+  4:[
+    {q:'What percentage of your credit score is determined by payment history?',opts:['10%','20%','35%','50%'],c:2,exp:'Payment history is the single biggest factor in your credit score. Even one missed payment can have a lasting effect for up to 6 years.'},
+    {q:'What credit utilisation ratio is generally recommended for a healthy score?',opts:['Below 10%','Below 30%','Below 50%','It does not matter'],c:1,exp:'Keeping your credit usage below 30% of your available limit signals to lenders that you are not over-reliant on credit.'},
+    {q:'How long can a missed payment remain on your credit file in the UK?',opts:['1 year','3 years','6 years','Forever'],c:2,exp:'Most negative entries, including missed payments, stay on your credit file for 6 years from the date of the issue.'},
+  ],
+  5:[
+    {q:'Two people invest the same monthly amount. Alex starts at 25 and stops at 35. Jordan starts at 35 and saves until 65. Who ends up with more?',opts:['Jordan — they saved for longer','Alex — compound growth on early money dominates','They end up with the same','It depends entirely on the market'],c:1,exp:'Money invested early has far more time to compound. Alex\'s 10 years of early investment generates more growth than Jordan\'s 30 years starting later.'},
+    {q:'What annual growth rate is commonly used as a standard assumption for diversified long-term investments?',opts:['2%','5%','7%','15%'],c:2,exp:'7% is widely used as a reasonable long-term average for diversified stock market investments, reflecting historical returns after inflation.'},
+    {q:'What is compound interest?',opts:['Interest charged only on the original amount','Interest paid to you by the government','Interest earned on both your original money and the interest already accumulated','A fixed-rate savings account'],c:2,exp:'Compound interest means you earn interest on your interest. Over decades, this creates the dramatic hockey-stick growth curve.'},
+  ],
+  6:[
+    {q:'In the 50/30/20 framework, what percentage is recommended for savings?',opts:['10%','20%','30%','50%'],c:1,exp:'The 50/30/20 rule suggests saving 20% of your income — covering emergency funds, investments, and future goals.'},
+    {q:'Which of these is classified as a NEED rather than a WANT?',opts:['Gym membership','Streaming subscriptions','Rent payments','Eating out regularly'],c:2,exp:'Rent is a fundamental non-negotiable expense. The others are all choices that could be reduced or eliminated.'},
+    {q:'What is the main purpose of tracking your spending?',opts:['To feel guilty about purchases','To impress your bank manager','To identify patterns so you can make intentional choices','It has no practical purpose'],c:2,exp:'Awareness is the foundation of any financial improvement. You cannot make better decisions about money you cannot see clearly.'},
+  ],
+});
+Object.assign(QS,{3:{q:0,ans:false},4:{q:0,ans:false},5:{q:0,ans:false},6:{q:0,ans:false}});
+function initQ(n){if(QS[n])QS[n]={q:0,ans:false};rQ(n)}
+
+// ── DEBT SIMULATOR ────────────────────────────────────────────────────────────
+function amortise(bal,apr,pmt){
+  const mr=apr/12/100;let b=bal,ti=0,months=0;const pts=[{m:0,ci:0}];
+  while(b>0.01&&months<600){const int=b*mr;ti+=int;b=Math.max(0,b+int-pmt);months++;pts.push({m:months,ci:ti});}
+  return{months,interest:Math.round(ti),total:Math.round(bal+ti),pts};
+}
+function fmtMo(n){if(n>=12)return Math.floor(n/12)+'yr'+(n%12?' '+n%12+'mo':'');return n+'mo';}
+function fmtGbp(n){return n>=1000?'£'+(n/1000).toFixed(1)+'K':'£'+n;}
+function updateDebt(v){
+  const pay=parseInt(v||document.getElementById('dslider')?.value||120);
+  const el=document.getElementById('dslv');if(el){el.textContent='£'+pay+' / mo';el.style.color=pay<=130?'#F87171':pay>=450?'#34D399':'#A78BFA';}
+  const cur=amortise(3000,29.9,pay),fast=amortise(3000,29.9,500);
+  const mo=document.getElementById('dmo'),di=document.getElementById('dint'),dt=document.getElementById('dtot'),ins=document.getElementById('dinsight');
+  if(mo)mo.textContent=fmtMo(cur.months);
+  if(di){di.textContent=fmtGbp(cur.interest);di.style.color=pay<=130?'#F87171':pay>=450?'#34D399':'#FCA5A5';}
+  const saved=Math.max(0,cur.interest-fast.interest);
+  if(dt)dt.textContent=saved>0?fmtGbp(saved)+' wasted':'Nothing wasted';
+  if(ins){
+    if(pay<=130)ins.innerHTML=`<span style="color:#F87171">At the minimum payment only, this £3,000 takes <strong>${fmtMo(cur.months)}</strong> to clear and costs <strong>${fmtGbp(cur.interest)}</strong> in interest alone.</span> Slide right to see how paying more changes this.`;
+    else if(pay<=200)ins.innerHTML=`Paying a little more cuts <strong style="color:#34D399">${fmtMo(fast.months-cur.months)}</strong> off the debt and saves <strong style="color:#34D399">${fmtGbp(saved)}</strong> compared to the minimum.`;
+    else if(pay<=350)ins.innerHTML=`At £${pay}/month you save <strong style="color:#34D399">${fmtGbp(saved)}</strong> in interest and clear the debt in <strong style="color:#34D399">${fmtMo(cur.months)}</strong>.`;
+    else ins.innerHTML=`Paying <strong style="color:#34D399">£${pay}/month</strong> clears this in <strong>${fmtMo(cur.months)}</strong>. You only pay <strong style="color:#34D399">${fmtGbp(cur.interest)}</strong> in interest total.`;
+  }
+  drawDebtGraph(cur,fast);
+}
+function drawDebtGraph(cur,fast){
+  const canvas=document.getElementById('debtCanvas');if(!canvas||!canvas.offsetWidth)return;
+  const dpr=window.devicePixelRatio||1,W=canvas.offsetWidth,H=150;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  const PAD={t:12,r:16,b:30,l:48};
+  const MONTHS=24; // fixed 24-month x-axis
+  // Build cumulative interest arrays month by month (fixed to 24 months)
+  function interestCurve(pmt){
+    const mr=29.9/12/100;let b=3000,ti=0;const pts=[0];
+    for(let m=1;m<=MONTHS;m++){if(b<=0){pts.push(ti);}else{const int=b*mr;ti+=int;b=Math.max(0,b+int-pmt);pts.push(Math.round(ti));}}
+    return pts;
+  }
+  const curPts=interestCurve(parseInt(document.getElementById('dslider')?.value||120));
+  const fastPts=interestCurve(500);
+  const maxI=Math.max(...curPts,10);
+  const tx=m=>PAD.l+(m/MONTHS)*(W-PAD.l-PAD.r);
+  const ty=v=>H-PAD.b-((v/maxI)*(H-PAD.t-PAD.b));
+  ctx.clearRect(0,0,W,H);
+  // gridlines
+  ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+  [0,0.25,0.5,0.75,1].forEach(f=>{const y=H-PAD.b-f*(H-PAD.t-PAD.b);ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(W-PAD.r,y);ctx.stroke();});
+  // shade gap between fast and cur
+  ctx.beginPath();
+  curPts.forEach((v,m)=>m?ctx.lineTo(tx(m),ty(v)):ctx.moveTo(tx(m),ty(v)));
+  for(let m=MONTHS;m>=0;m--)ctx.lineTo(tx(m),ty(fastPts[m]));
+  ctx.closePath();ctx.fillStyle='rgba(248,113,113,0.1)';ctx.fill();
+  // fast line (green, dashed)
+  ctx.beginPath();ctx.setLineDash([5,4]);ctx.strokeStyle='#34D399';ctx.lineWidth=1.5;
+  fastPts.forEach((v,m)=>m?ctx.lineTo(tx(m),ty(v)):ctx.moveTo(tx(m),ty(v)));ctx.stroke();ctx.setLineDash([]);
+  // cur line (red/purple, solid)
+  const pay=parseInt(document.getElementById('dslider')?.value||120);
+  ctx.beginPath();ctx.strokeStyle=pay<=130?'#F87171':pay>=450?'#A78BFA':'#F87171';ctx.lineWidth=2.5;
+  curPts.forEach((v,m)=>m?ctx.lineTo(tx(m),ty(v)):ctx.moveTo(tx(m),ty(v)));ctx.stroke();
+  // x-axis labels
+  ctx.fillStyle='rgba(255,255,255,0.3)';ctx.font='10px sans-serif';ctx.textAlign='center';
+  [0,6,12,18,24].forEach(m=>ctx.fillText(m===0?'':m+'mo',tx(m),H-8));
+  // y-axis labels
+  ctx.textAlign='right';
+  [0,0.5,1].forEach(f=>{const val=Math.round(maxI*f);ctx.fillText(val===0?'£0':'£'+val,PAD.l-4,ty(val)+4);});
+  // label end of cur line
+  const lastCur=curPts[MONTHS];
+  if(lastCur>0){
+    ctx.fillStyle=pay<=130?'#F87171':'#A78BFA';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
+    ctx.fillText('£'+lastCur,tx(MONTHS)+3,ty(lastCur)+4);
+  }
+}
+
+// ── MYTH VS FACT ─────────────────────────────────────────────────────────────
+const MVFD=[
+  {stmt:'Checking your own credit score damages it',ans:'myth',exp:'Checking your own score is a soft inquiry with zero impact. Only hard searches from lenders affect it.'},
+  {stmt:'Paying off a debt removes it from your credit history immediately',ans:'myth',exp:'Paid debts stay on your credit file for up to 6 years. The record shows as satisfied but remains visible to lenders.'},
+  {stmt:'Being on the electoral roll helps your credit score',ans:'fact',exp:'Registering to vote confirms your address and identity, which lenders use to verify you. It is one of the easiest score improvements.'},
+  {stmt:'You have one single credit score across all lenders',ans:'myth',exp:'There are three main credit reference agencies in the UK — Experian, Equifax, and TransUnion — each with their own score.'},
+  {stmt:'Using 80% of your credit limit shows you can manage large amounts',ans:'myth',exp:'High utilisation signals financial stress to lenders. Keeping usage below 30% of your limit is the sweet spot.'},
+  {stmt:'Missing one payment has no real effect if you usually pay on time',ans:'myth',exp:'A single missed payment can stay on your credit file for 6 years. Payment history is the single biggest factor in your score.'},
+];
+let mvfi=0,mvfScore=0,mvfDone=false;
+function initMVF(){mvfi=0;mvfScore=0;mvfDone=false;renderMVF();}
+function renderMVF(){
+  if(mvfi>=MVFD.length){showMVFResult();return;}
+  const item=MVFD[mvfi];
+  const card=document.getElementById('mvfcard');
+  if(card)card.innerHTML=`<div class="mvf-stmt">"${item.stmt}"</div>`;
+  const p=document.getElementById('mvfp');if(p)p.textContent=`Statement ${mvfi+1} of ${MVFD.length}`;
+  const fb=document.getElementById('mvffb');if(fb){fb.className='mvf-fb';fb.style.display='none';}
+  const btns=document.getElementById('mvfbtns');if(btns){btns.style.display='grid';btns.querySelectorAll('button').forEach(b=>b.disabled=false);}
+  const nxt=document.getElementById('mvfnxt');if(nxt)nxt.style.display='none';
+  const fin=document.getElementById('mvffin');if(fin)fin.style.display='none';
+}
+function mvfAns(ans){
+  const item=MVFD[mvfi];const ok=ans===item.ans;
+  if(ok)mvfScore++;
+  const fb=document.getElementById('mvffb');
+  if(fb){fb.className='mvf-fb show '+(ok?'ok':'bad');fb.innerHTML=`<strong>${ok?'Correct':'Not quite'} — This is a ${item.ans.toUpperCase()}</strong><br>${item.exp}`;fb.style.display='block';}
+  const btns=document.getElementById('mvfbtns');if(btns)btns.querySelectorAll('button').forEach(b=>b.disabled=true);
+  const nxt=document.getElementById('mvfnxt');if(nxt)nxt.style.display=mvfi<MVFD.length-1?'block':'none';
+  const fin=document.getElementById('mvffin');if(fin&&mvfi===MVFD.length-1)fin.style.display='block';
+}
+function mvfNext(){mvfi++;renderMVF();}
+function showMVFResult(){
+  const sc=document.getElementById('mvfscore');if(sc)sc.textContent=mvfScore+'/'+MVFD.length;
+  const msg=document.getElementById('mvfmsg');
+  if(msg)msg.textContent=mvfScore>=5?'Excellent. Most people fall for several of those.':mvfScore>=3?'Solid result. Credit knowledge takes time to build.':'Some surprising ones in there — now you know the real facts.';
+  const fin=document.getElementById('mvffin');if(fin)fin.style.display='block';
+  const card=document.getElementById('mvfcard');if(card)card.style.display='none';
+  const btns=document.getElementById('mvfbtns');if(btns)btns.style.display='none';
+  const p=document.getElementById('mvfp');if(p)p.style.display='none';
+}
+
+// ── COST OF WAITING SIMULATOR ─────────────────────────────────────────────────
+function cowFV(startAge,monthly){
+  const months=(65-startAge)*12,mr=0.07/12;
+  if(months<=0)return 0;
+  return Math.round(monthly*((Math.pow(1+mr,months)-1)/mr));
+}
+function cowInv(startAge,monthly){return Math.max(0,monthly*(65-startAge)*12);}
+function updateCow(){
+  const ageEl=document.getElementById('cowage'),moEl=document.getElementById('cowmo');
+  if(!ageEl||!moEl)return;
+  const age=parseInt(ageEl.value),mo=parseInt(moEl.value);
+  const agev=document.getElementById('cowagev');if(agev)agev.textContent=age;
+  const mov=document.getElementById('cowmov');if(mov)mov.textContent='£'+mo;
+  const yours=cowFV(age,mo),ref=cowFV(25,mo),diff=Math.max(0,ref-yours);
+  const yInv=cowInv(age,mo),rInv=cowInv(25,mo);
+  const fmt=n=>n>=1000000?'£'+(n/1000000).toFixed(2)+'M':n>=1000?'£'+(n/1000).toFixed(0)+'K':'£'+n;
+  const el=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  el('cowMyAge','Start at '+age);el('cowMyInv','Invested: '+fmt(yInv));el('cowMyVal',fmt(yours));
+  el('cowRefInv','Invested: '+fmt(rInv));el('cowRefVal',fmt(ref));
+  const diff_el=document.getElementById('cowDiff');
+  if(age<=25){
+    if(diff_el){diff_el.className='cow-diff win';diff_el.innerHTML='<div class="cow-diff-lbl">Perfect timing</div><div class="cow-diff-num" style="color:var(--teal)">Maximum compound growth from here</div>';}
+  }else{
+    if(diff_el){diff_el.className='cow-diff loss';diff_el.innerHTML=`<div class="cow-diff-lbl">Starting at ${age} instead of 25 costs you:</div><div class="cow-diff-num" style="color:#F87171">${fmt(diff)}</div><div class="cow-diff-sub">${age-25} years of lost growth</div>`;}
+  }
+  const ins=document.getElementById('cowInsight');
+  if(ins){
+    if(age<=25)ins.textContent='Perfect timing. Maximum compound growth from here to 65.';
+    else if(age<=30)ins.textContent=`5 years later costs you ${fmt(diff)} by retirement.`;
+    else if(age<=35)ins.textContent=`Most common starting point — starting at 25 would have given you ${fmt(diff)} more.`;
+    else if(age<=45)ins.textContent=`Waiting until ${age} costs ${fmt(diff)} vs starting at 25. But starting now still beats waiting further.`;
+    else ins.textContent='Starting now still matters. Every year counts. But the numbers show why earlier is always better.';
+  }
+  drawCowGraph(age,mo);
+}
+function drawCowGraph(startAge,monthly){
+  const canvas=document.getElementById('cowCanvas');if(!canvas||!canvas.offsetWidth)return;
+  const dpr=window.devicePixelRatio||1,W=canvas.offsetWidth,H=180;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  const PAD={t:16,r:56,b:30,l:52};
+  const mr=0.07/12;
+  const fvAt=(sa,mo,age)=>{if(age<=sa)return 0;const m=(age-sa)*12;return Math.round(mo*((Math.pow(1+mr,m)-1)/mr));};
+  const ages=[];for(let a=20;a<=65;a++)ages.push(a);
+  const ref=ages.map(a=>fvAt(25,monthly,a));
+  const cur=ages.map(a=>fvAt(startAge,monthly,a));
+  // Scale to 115% of ref line max - lines always sit nicely in the chart and move up with monthly
+  const maxV=Math.max(ref[ref.length-1]*1.15,1);
+  const tx=a=>PAD.l+(a-20)/(65-20)*(W-PAD.l-PAD.r);
+  const ty=v=>H-PAD.b-(v/maxV)*(H-PAD.t-PAD.b);
+  ctx.clearRect(0,0,W,H);
+  // gridlines
+  ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+  [0,0.25,0.5,0.75,1].forEach(f=>{const y=H-PAD.b-f*(H-PAD.t-PAD.b);ctx.beginPath();ctx.moveTo(PAD.l,y);ctx.lineTo(W-PAD.r,y);ctx.stroke();});
+  // shaded gap
+  if(startAge>25){
+    ctx.beginPath();
+    ages.forEach((a,i)=>i?ctx.lineTo(tx(a),ty(ref[i])):ctx.moveTo(tx(a),ty(ref[i])));
+    ages.slice().reverse().forEach((a,i)=>ctx.lineTo(tx(a),ty(cur[ages.length-1-i])));
+    ctx.closePath();ctx.fillStyle='rgba(245,158,11,0.1)';ctx.fill();
+  }
+  // green ref line (start at 25)
+  ctx.beginPath();ctx.strokeStyle='#34D399';ctx.lineWidth=2;
+  ages.forEach((a,i)=>i?ctx.lineTo(tx(a),ty(ref[i])):ctx.moveTo(tx(a),ty(ref[i])));ctx.stroke();
+  // amber cur line
+  ctx.beginPath();ctx.strokeStyle='#F59E0B';ctx.lineWidth=2.5;
+  ages.forEach((a,i)=>i?ctx.lineTo(tx(a),ty(cur[i])):ctx.moveTo(tx(a),ty(cur[i])));ctx.stroke();
+  // end value labels on lines - placed inside right padding area
+  const fmt=n=>n>=1000000?'£'+(n/1000000).toFixed(2)+'M':n>=1000?'£'+(n/1000).toFixed(0)+'K':'£'+n;
+  const refEnd=ref[ref.length-1],curEnd=cur[cur.length-1];
+  ctx.font='bold 10px sans-serif';
+  ctx.fillStyle='#34D399';ctx.textAlign='left';ctx.fillText(fmt(refEnd),tx(65)+5,ty(refEnd)+4);
+  if(startAge>25){
+    const offset=Math.abs(ty(curEnd)-ty(refEnd))<14?14:0;
+    ctx.fillStyle='#F59E0B';ctx.fillText(fmt(curEnd),tx(65)+5,ty(curEnd)+4+offset);
+  }
+  // axes
+  ctx.fillStyle='rgba(255,255,255,0.25)';ctx.font='10px sans-serif';ctx.textAlign='center';
+  [20,35,50,65].forEach(a=>ctx.fillText(a,tx(a),H-6));
+  ctx.textAlign='right';
+  [0,0.5,1].forEach(f=>{const v=Math.round(maxV*f);ctx.fillText(fmt(v),PAD.l-4,ty(v)+4);});
+}
+
+// ── NEEDS WANTS SAVE ──────────────────────────────────────────────────────────
+const NWSD=[
+  {emoji:'🏠',name:'Rent or mortgage payment',desc:'Your monthly housing cost',correct:'need',exp:'Housing is a fundamental non-negotiable need.'},
+  {emoji:'📱',name:'Basic phone bill',desc:'Standard monthly mobile plan',correct:'need',exp:'A basic phone plan for communication is considered a need in modern life.'},
+  {emoji:'🎵',name:'Three streaming subscriptions',desc:'Netflix, Spotify, Disney Plus',correct:'want',exp:'One might be borderline — three is firmly in the wants category.'},
+  {emoji:'☕',name:'Daily coffee shop visits',desc:'One coffee every morning',correct:'want',exp:'A daily coffee habit can easily cost over £100 a month. Making coffee at home is a clear saving opportunity.'},
+  {emoji:'🏥',name:'Health insurance premium',desc:'Monthly protection cover',correct:'need',exp:'Health protection is a fundamental need.'},
+  {emoji:'👟',name:'New trainers for fashion',desc:'Already have functional shoes',correct:'want',exp:'If you already have functional footwear, additional trainers are a want.'},
+  {emoji:'🏖️',name:'Holiday savings',desc:'Putting money aside for a trip',correct:'save',exp:'Holidays are goals to save towards rather than immediate essentials.'},
+  {emoji:'🍕',name:'Takeaways three times a week',desc:'Regular food delivery orders',correct:'want',exp:'Regular takeaways are a lifestyle choice rather than a need.'},
+];
+let nwsi=0,nwsAnswers=[],nwsDone=false;
+function initNWS(){nwsi=0;nwsAnswers=[];nwsDone=false;renderNWS();}
+function renderNWS(){
+  if(nwsDone){showNWSResult();return;}
+  const item=NWSD[nwsi];
+  const card=document.getElementById('nwscard');
+  if(card)card.innerHTML=`<div class="nws-emoji">${item.emoji}</div><div class="nws-name">${item.name}</div><div class="nws-desc">${item.desc}</div>`;
+  const p=document.getElementById('nwsp');if(p)p.textContent=`Item ${nwsi+1} of ${NWSD.length}`;
+  const fb=document.getElementById('nwsfb');if(fb){fb.className='nws-fb';fb.textContent='';}
+  ['nwsbn','nwsbw','nwsbs'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=false;});
+  const nxt=document.getElementById('nwsnxt');if(nxt)nxt.style.display='none';
+  const res=document.getElementById('nwsresult');if(res)res.style.display='none';
+}
+function nwsAns(ans){
+  const item=NWSD[nwsi];nwsAnswers.push(ans);
+  const ok=ans===item.correct;
+  const fb=document.getElementById('nwsfb');
+  if(fb){fb.className='nws-fb show '+(ok?'ok':'hmm');fb.innerHTML=`<strong>${ok?'Correct':'Good thought'} — This is a ${item.correct.toUpperCase()}</strong><br>${item.exp}`;}
+  ['nwsbn','nwsbw','nwsbs'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=true;});
+  const nxt=document.getElementById('nwsnxt');if(nxt)nxt.style.display=nwsi<NWSD.length-1?'block':'none';
+  if(nwsi===NWSD.length-1){nwsDone=true;const fin=document.getElementById('nwsnxt');if(fin){fin.innerHTML='<button class="btn" onclick="showNWSResult()">See my results →</button>';fin.style.display='block';}}
+}
+function nwsNext(){nwsi++;renderNWS();}
+function showNWSResult(){
+  const needs=nwsAnswers.filter(a=>a==='need').length;
+  const wants=nwsAnswers.filter(a=>a==='want').length;
+  const saves=nwsAnswers.filter(a=>a==='save').length;
+  const tot=nwsAnswers.length||1;
+  document.getElementById('nwsNeedPct').textContent=Math.round(needs/tot*100)+'%';
+  document.getElementById('nwsWantPct').textContent=Math.round(wants/tot*100)+'%';
+  document.getElementById('nwsSavePct').textContent=Math.round(saves/tot*100)+'%';
+  const ins=document.getElementById('nwsInsight');
+  const wp=wants/tot;
+  if(ins)ins.textContent=wp>0.5?'A high proportion in wants — worth reviewing where lifestyle spending could be redirected.':saves/tot>=0.3?'Strong savings instinct. Keep that proportion high and your future self will thank you.':'Awareness is step one. Now you can see your pattern and decide if you want to shift it.';
+  const card=document.getElementById('nwscard');if(card)card.style.display='none';
+  const p=document.getElementById('nwsp');if(p)p.style.display='none';
+  ['nwsbn','nwsbw','nwsbs'].forEach(id=>{const b=document.getElementById(id);if(b)b.style.display='none';});
+  const nxt=document.getElementById('nwsnxt');if(nxt)nxt.style.display='none';
+  const fb=document.getElementById('nwsfb');if(fb){fb.className='nws-fb';fb.textContent='';}
+  const res=document.getElementById('nwsresult');if(res)res.style.display='block';
+}
+
+// ── SAVE STATE extensions ─────────────────────────────────────────────────────
+// ── XP BAR ───────────────────────────────────────────────────────────────────
+function updateXPBar(){
+  const pct=Math.min(100,Math.round((ST.xp/XP_MAX)*100));
+  const bar=document.getElementById('xpbf'),val=document.getElementById('xpbv');
+  if(bar)bar.style.width=pct+'%';
+  if(val)val.textContent=ST.xp+' / '+XP_MAX+' XP';
+}
+
+// ── COMBO / STREAK FEEDBACK ──────────────────────────────────────────────────
+function showCombo(msg){
+  const b=document.getElementById('comboBadge');if(!b)return;
+  b.textContent=msg;b.classList.add('show');
+  setTimeout(()=>b.classList.remove('show'),1600);
+}
+// Patch qAns to trigger combo
+let ansStreak=0; // running correct streak this session
+const _qAns=qAns;
+qAns=function(n,idx){
+  _qAns(n,idx);
+  const d=QD[n][QS[n].q];
+  if(idx===d.c){
+    ansStreak++;
+    if(ansStreak>=3){
+      const msgs=['🔥 3 in a row!','🔥🔥 4 correct!','🔥🔥🔥 5 in a row!','⚡ 6 correct! On fire!','💥 '+ansStreak+' correct in a row!'];
+      showCombo(msgs[Math.min(ansStreak-3,msgs.length-1)]);
+    }
+    if(ansStreak>ST.best){ST.best=ansStreak;save();rStats();}
+  } else {
+    ansStreak=0;
+  }
+};
+
+// ── NEWS MODULE ───────────────────────────────────────────────────────────────
+let newsActive=false;
+function openNews(){
+  newsActive=true;
+  document.getElementById('cs').classList.add('open');
+  document.body.style.overflow='hidden';
+  si=46;showS(46);updDotsNews();
+  initTSort();
+  // Add quiz 7
+  if(!QD[7])Object.assign(QD,{7:[
+    {q:'If the US imposes a 25% tariff on UK car exports, who most directly pays that extra cost first?',opts:['The US government','The UK car manufacturer','The US importer/dealer','The end consumer'],c:2,exp:'The importer pays the tariff to the US government. They typically pass most of this cost to dealers, who then pass it to buyers — so consumers usually feel it in the end.'},
+    {q:'What is the most likely effect of widespread tariffs on everyday consumer prices?',opts:['Prices fall as competition increases','Prices rise as imported goods cost more','Prices stay the same — businesses absorb the cost','Only luxury goods get more expensive'],c:1,exp:'Tariffs raise the cost of imports. Businesses rarely absorb this fully — most of the extra cost is passed on to consumers through higher prices.'},
+    {q:'A country introduces tariffs to protect its steel industry. Which group most likely benefits?',opts:['Consumers buying steel products','Foreign steel manufacturers','Domestic steel workers and producers','Retailers selling imported goods'],c:2,exp:'Domestic steel producers face less price competition from cheaper imports. Their workers benefit from stronger demand for local steel — though downstream industries that use steel (like car makers) often face higher costs.'},
+  ]});
+  if(!QS[7])QS[7]={q:0,ans:false};
+}
+function updDotsNews(){
+  const pd=document.getElementById('pdots');if(!pd)return;pd.innerHTML='';
+  const total=6,idx=si-46;
+  for(let i=0;i<total;i++){const d=document.createElement('div');d.className='pd '+(i===idx?'active':i<idx?'done':'inactive');pd.appendChild(d);}
+}
+function finishNews(){
+  newsActive=false;
+  ST.xp+=75;ST.streak=Math.min(ST.streak+1,99);save();
+  confetti();
+  document.getElementById('cs').classList.remove('open');
+  document.body.style.overflow='';
+  buildMap();rStats();updateXPBar();
+}
+
+// Patch showS to handle news screens too
+const _showSPrev=showS;
+showS=function(i){
+  _showSPrev(i);
+  if(i>=46&&i<=51)updDotsNews();
+  // quiz 7
+  if(i===50&&QD[7]){QS[7]={q:0,ans:false};rQ(7);}
+};
+
+// Patch ns() to stay in news range
+const _ns=ns;
+ns=function(){
+  if(newsActive&&si>=51)return;
+  _ns();
+};
+
+// ── TARIFF IMPACT SORTER ─────────────────────────────────────────────────────
+const TSORT_DATA=[
+  {name:'🏭 UK Manufacturers',desc:'Companies that export goods to countries imposing tariffs',correct:'lose',exp:'Their products become more expensive abroad — demand falls.'},
+  {name:'🏠 Domestic UK producers',desc:'Businesses making goods only sold inside the UK',correct:'win',exp:'Less competition from cheaper imports means more customers choose local.'},
+  {name:'🛒 UK Consumers',desc:'People buying everyday imported goods',correct:'lose',exp:'Imported goods get more expensive — that cost reaches your shopping basket.'},
+  {name:'💼 UK Government',desc:'If the UK retaliates with its own tariffs on imports',correct:'win',exp:'Tariff revenue goes to the government — though it can slow the economy overall.'},
+  {name:'✈️ International trade',desc:'The flow of goods between countries globally',correct:'lose',exp:'Trade wars reduce the total volume of trade, shrinking economic output for everyone.'},
+];
+let tsAnswered=0,tsCorrect=0;
+function initTSort(){
+  tsAnswered=0;tsCorrect=0;
+  const el=document.getElementById('tsort');if(!el)return;
+  el.innerHTML='';
+  TSORT_DATA.forEach((item,idx)=>{
+    const div=document.createElement('div');div.className='tariff-item';div.id='ti'+idx;
+    div.innerHTML=`<div class="tariff-item-name">${item.name}</div><div class="tariff-item-desc">${item.desc}</div>`;
+    div.appendChild(makeTBtns(idx));el.appendChild(div);
+    const fb=document.createElement('div');fb.className='tariff-fb';fb.id='tfb'+idx;el.appendChild(fb);
+  });
+  document.getElementById('tsortdone').style.display='none';
+}
+function makeTBtns(idx){
+  const wrap=document.createElement('div');wrap.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px';
+  [['✅ Benefit','win'],['❌ Hurt','lose'],['🤷 Mixed','neutral']].forEach(([lbl,val])=>{
+    const b=document.createElement('button');
+    b.style.cssText='padding:8px 4px;border-radius:9px;border:1.5px solid rgba(255,255,255,.1);background:transparent;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;color:var(--text-2)';
+    b.textContent=lbl;b.dataset.val=val;b.onclick=()=>tsAns(idx,val);wrap.appendChild(b);
+  });
+  return wrap;
+}
+function tsAns(idx,val){
+  const item=TSORT_DATA[idx];
+  const el=document.getElementById('ti'+idx);if(!el||el.dataset.answered)return;
+  el.dataset.answered='1';
+  const ok=val===item.correct;if(ok)tsCorrect++;
+  el.classList.add(item.correct);
+  // Visually mark each button: correct answer = green glow, wrong guess = red cross
+  const valMap={win:'✅ Benefit',lose:'❌ Hurt',neutral:'🤷 Mixed'};
+  el.querySelectorAll('button').forEach(b=>{
+    b.disabled=true;
+    const bval=b.dataset.val;
+    if(bval===item.correct){
+      // Always highlight the correct answer in green
+      b.style.cssText='padding:8px 4px;border-radius:9px;border:2px solid #34D399;background:rgba(52,211,153,.15);font-size:12px;font-weight:800;font-family:var(--font);color:#34D399;cursor:default';
+      b.textContent='✓ '+valMap[bval].split(' ')[1];
+    } else if(bval===val&&!ok){
+      // The wrong choice the user picked
+      b.style.cssText='padding:8px 4px;border-radius:9px;border:2px solid #F87171;background:rgba(248,113,113,.1);font-size:12px;font-weight:800;font-family:var(--font);color:#F87171;cursor:default;text-decoration:line-through;opacity:.7';
+    } else {
+      b.style.opacity='.3';
+    }
+  });
+  const fb=document.getElementById('tfb'+idx);
+  if(fb){fb.className='tariff-fb show '+(ok?'ok':'bad');fb.innerHTML=(ok?'✓ Correct. ':'✗ Not quite — ')+item.exp;}
+  tsAnswered++;
+  if(tsAnswered===TSORT_DATA.length){
+    const sc=document.getElementById('tscore');if(sc)sc.textContent=tsCorrect+'/'+TSORT_DATA.length;
+    document.getElementById('tsortdone').style.display='block';
+  }
+}
+
+Object.assign(ST,{l2:localStorage.getItem('ls_l2')==='1',l3:localStorage.getItem('ls_l3')==='1'});
+const _save=save;
+save=function(){_save();if(ST.l2)localStorage.setItem('ls_l2','1');if(ST.l3)localStorage.setItem('ls_l3','1');};
+if(ST.l2){LVS[1].status='completed';LVS[2].status='active';}
+if(ST.l3){LVS[2].status='completed';}
+
+</script>
+</body>
+</html>
