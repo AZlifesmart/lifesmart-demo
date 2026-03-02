@@ -245,6 +245,8 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
 .vw-play-btn{width:60px;height:60px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 30px rgba(0,212,170,.5);position:relative;z-index:1;transition:transform .15s}
 .vw-facade:hover .vw-play-btn{transform:scale(1.1)}
 .vw-title{font-size:13px;font-weight:700;color:#fff;position:relative;z-index:1;text-shadow:0 1px 4px rgba(0,0,0,.8);text-align:center;padding:0 20px}
+/* Block YouTube logo click in control bar - blends with YT's dark bar */
+.vw-logo-block{position:absolute;bottom:0;right:0;width:90px;height:42px;z-index:2;background:linear-gradient(to left,rgba(0,0,0,.85) 60%,transparent);pointer-events:all;cursor:default}
 .vlbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-m);margin-bottom:10px}
 .vtitle{font-size:18px;font-weight:700;margin-bottom:8px;line-height:1.3}
 .vdesc{font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:24px}
@@ -1937,6 +1939,8 @@ function loadVid(id){
   iframe.allowFullscreen=true;
   iframe.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;border:none';
   wrap.appendChild(iframe);
+  // Add logo blocker overlay
+  const blk=document.createElement('div');blk.className='vw-logo-block';wrap.appendChild(blk);
 }
 </script>
 </body>
