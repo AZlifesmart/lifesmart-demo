@@ -239,7 +239,9 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
 .ci-mi{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2)}
 .ci-mi span{font-size:16px}
 .vw{background:#000;border-radius:14px;overflow:hidden;position:relative;padding-bottom:56.25%;width:100%;margin:8px 0 20px}
-.vw iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.vw iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:auto}
+/* Block top-right "Watch on YouTube" button */
+.vw-block-tr{position:absolute;top:0;right:0;width:140px;height:44px;background:#000;z-index:2;pointer-events:all;border-radius:0 14px 0 0}
 .vlbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-m);margin-bottom:10px}
 .vtitle{font-size:18px;font-weight:700;margin-bottom:8px;line-height:1.3}
 .vdesc{font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:24px}
@@ -443,7 +445,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- C1 VIDEO -->
   <div class="sbody" id="s1" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/gDydjXMEQ60" title="The Psychology of Money" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+    <div class="vw"><iframe src="https://www.youtube.com/embed/gDydjXMEQ60?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="The Psychology of Money" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
     <div class="vtitle">The Psychology of Money</div>
     <div class="vdesc">Understanding the emotions behind financial decisions — the same forces scammers exploit to catch people off guard.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -548,7 +550,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- C2 VIDEO -->
   <div class="sbody" id="s8" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/UsQAXVjzbcs" title="Banking Basics" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+    <div class="vw"><iframe src="https://www.youtube.com/embed/UsQAXVjzbcs?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="Banking Basics" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
     <div class="vtitle">Banking Basics</div>
     <div class="vdesc">How modern banking works and the gaps that fraudsters use to target your accounts.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -655,7 +657,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- L2 C3 Video -->
   <div class="sbody" id="s16" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/nQC853JqCL4" title="How Credit Actually Works" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+    <div class="vw"><iframe src="https://www.youtube.com/embed/nQC853JqCL4?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="How Credit Actually Works" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
     <div class="vtitle">How Credit Actually Works</div>
     <div class="vdesc">A clear walkthrough of how credit works in the financial system and what it actually costs you.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -761,7 +763,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- L2 C4 Video -->
   <div class="sbody" id="s23" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/6rXsLW3wXUQ" title="The Hidden Cost of Minimum Payments" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+    <div class="vw"><iframe src="https://www.youtube.com/embed/6rXsLW3wXUQ?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="The Hidden Cost of Minimum Payments" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
     <div class="vtitle">The Hidden Cost of Minimum Payments</div>
     <div class="vdesc">Why the minimum payment on your credit card is one of the most expensive choices you can make.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -872,7 +874,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- L3 C5 Video -->
   <div class="sbody" id="s31" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/RnGmJnG9TjU" title="Time Value of Money" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+    <div class="vw"><iframe src="https://www.youtube.com/embed/RnGmJnG9TjU?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="Time Value of Money" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
     <div class="vtitle">Time Value of Money</div>
     <div class="vdesc">Why a pound today is worth more than a pound tomorrow — and what that means for your financial future.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -974,7 +976,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- L3 C6 Video -->
   <div class="sbody" id="s38" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/xPJKuNOoAkE" title="Budgeting — 50/30/20" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
+    <div class="vw"><iframe src="https://www.youtube.com/embed/xPJKuNOoAkE?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="Budgeting — 50/30/20" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
     <div class="vtitle">Budgeting — 50/30/20</div>
     <div class="vdesc">A practical framework for allocating your income across needs, wants, and savings that anyone can apply.</div>
     <button class="btn" onclick="ns()">Continue →</button>
