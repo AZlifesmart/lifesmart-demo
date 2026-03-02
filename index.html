@@ -238,10 +238,13 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
 .ci-meta{display:flex;align-items:center;gap:20px;margin-top:8px}
 .ci-mi{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-2)}
 .ci-mi span{font-size:16px}
-.vw{background:#000;border-radius:14px;overflow:hidden;position:relative;padding-bottom:56.25%;width:100%;margin:8px 0 20px}
-.vw iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;pointer-events:auto}
-/* Block top-right "Watch on YouTube" button */
-.vw-block-tr{position:absolute;top:0;right:0;width:140px;height:44px;background:#000;z-index:2;pointer-events:all;border-radius:0 14px 0 0}
+.vw{background:#0D0D20;border-radius:14px;overflow:hidden;position:relative;padding-bottom:56.25%;width:100%;margin:8px 0 20px}
+.vw iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.vw-facade{position:absolute;inset:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background-size:cover;background-position:center;border-radius:14px}
+.vw-facade::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.55) 100%);border-radius:14px}
+.vw-play-btn{width:60px;height:60px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 30px rgba(0,212,170,.5);position:relative;z-index:1;transition:transform .15s}
+.vw-facade:hover .vw-play-btn{transform:scale(1.1)}
+.vw-title{font-size:13px;font-weight:700;color:#fff;position:relative;z-index:1;text-shadow:0 1px 4px rgba(0,0,0,.8);text-align:center;padding:0 20px}
 .vlbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-m);margin-bottom:10px}
 .vtitle{font-size:18px;font-weight:700;margin-bottom:8px;line-height:1.3}
 .vdesc{font-size:14px;font-weight:500;color:var(--text-2);line-height:1.6;margin-bottom:24px}
@@ -445,7 +448,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- C1 VIDEO -->
   <div class="sbody" id="s1" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/gDydjXMEQ60?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="The Psychology of Money" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
+    <div class="vw" id="vw-gDydjXMEQ60"><div class="vw-facade" style="background-image:url('https://img.youtube.com/vi/gDydjXMEQ60/hqdefault.jpg')" onclick="loadVid('gDydjXMEQ60')"><div class="vw-play-btn">▶</div><div class="vw-title">The Psychology of Money</div></div></div>
     <div class="vtitle">The Psychology of Money</div>
     <div class="vdesc">Understanding the emotions behind financial decisions — the same forces scammers exploit to catch people off guard.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -550,7 +553,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- C2 VIDEO -->
   <div class="sbody" id="s8" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/UsQAXVjzbcs?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="Banking Basics" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
+    <div class="vw" id="vw-UsQAXVjzbcs"><div class="vw-facade" style="background-image:url('https://img.youtube.com/vi/UsQAXVjzbcs/hqdefault.jpg')" onclick="loadVid('UsQAXVjzbcs')"><div class="vw-play-btn">▶</div><div class="vw-title">Banking Basics</div></div></div>
     <div class="vtitle">Banking Basics</div>
     <div class="vdesc">How modern banking works and the gaps that fraudsters use to target your accounts.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -657,7 +660,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- L2 C3 Video -->
   <div class="sbody" id="s16" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/nQC853JqCL4?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="How Credit Actually Works" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
+    <div class="vw" id="vw-nQC853JqCL4"><div class="vw-facade" style="background-image:url('https://img.youtube.com/vi/nQC853JqCL4/hqdefault.jpg')" onclick="loadVid('nQC853JqCL4')"><div class="vw-play-btn">▶</div><div class="vw-title">How Credit Actually Works</div></div></div>
     <div class="vtitle">How Credit Actually Works</div>
     <div class="vdesc">A clear walkthrough of how credit works in the financial system and what it actually costs you.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -763,7 +766,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- L2 C4 Video -->
   <div class="sbody" id="s23" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/6rXsLW3wXUQ?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="The Hidden Cost of Minimum Payments" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
+    <div class="vw" id="vw-6rXsLW3wXUQ"><div class="vw-facade" style="background-image:url('https://img.youtube.com/vi/6rXsLW3wXUQ/hqdefault.jpg')" onclick="loadVid('6rXsLW3wXUQ')"><div class="vw-play-btn">▶</div><div class="vw-title">The Hidden Cost of Minimum Payments</div></div></div>
     <div class="vtitle">The Hidden Cost of Minimum Payments</div>
     <div class="vdesc">Why the minimum payment on your credit card is one of the most expensive choices you can make.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -874,7 +877,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- L3 C5 Video -->
   <div class="sbody" id="s31" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/RnGmJnG9TjU?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="Time Value of Money" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
+    <div class="vw" id="vw-RnGmJnG9TjU"><div class="vw-facade" style="background-image:url('https://img.youtube.com/vi/RnGmJnG9TjU/hqdefault.jpg')" onclick="loadVid('RnGmJnG9TjU')"><div class="vw-play-btn">▶</div><div class="vw-title">Time Value of Money</div></div></div>
     <div class="vtitle">Time Value of Money</div>
     <div class="vdesc">Why a pound today is worth more than a pound tomorrow — and what that means for your financial future.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -976,7 +979,7 @@ input[type=range].amber::-webkit-slider-thumb{background:var(--amber);box-shadow
   <!-- L3 C6 Video -->
   <div class="sbody" id="s38" style="display:none">
     <div class="vlbl">Watch first · 2 min</div>
-    <div class="vw"><iframe src="https://www.youtube.com/embed/xPJKuNOoAkE?rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1" title="Budgeting — 50/30/20" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe><div class="vw-block-tr"></div></div>
+    <div class="vw" id="vw-xPJKuNOoAkE"><div class="vw-facade" style="background-image:url('https://img.youtube.com/vi/xPJKuNOoAkE/hqdefault.jpg')" onclick="loadVid('xPJKuNOoAkE')"><div class="vw-play-btn">▶</div><div class="vw-title">Budgeting — 50/30/20</div></div></div>
     <div class="vtitle">Budgeting — 50/30/20</div>
     <div class="vdesc">A practical framework for allocating your income across needs, wants, and savings that anyone can apply.</div>
     <button class="btn" onclick="ns()">Continue →</button>
@@ -1924,6 +1927,17 @@ save=function(){_save();if(ST.l2)localStorage.setItem('ls_l2','1');if(ST.l3)loca
 if(ST.l2){LVS[1].status='completed';LVS[2].status='active';}
 if(ST.l3){LVS[2].status='completed';}
 
+
+function loadVid(id){
+  const wrap=document.getElementById('vw-'+id);if(!wrap)return;
+  const facade=wrap.querySelector('.vw-facade');if(facade)facade.remove();
+  const iframe=document.createElement('iframe');
+  iframe.src='https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&color=white';
+  iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframe.allowFullscreen=true;
+  iframe.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;border:none';
+  wrap.appendChild(iframe);
+}
 </script>
 </body>
 </html>
